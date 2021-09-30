@@ -3,7 +3,7 @@ import os
 
 # parse CPU files
 def parse_files(args, stats_dict):
-  # Use search term to get the files TODO
+  # Use search term to get the files
   cpufiles = []
   files = os.listdir(".")
   for f in files:

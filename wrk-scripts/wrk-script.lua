@@ -1,7 +1,7 @@
--- Add a 50ms delay to each message, possibly this compares better to powerful hardware in latency!
+-- Add a 10ms delay to each message, possibly this compares better to powerful hardware in latency!
 -- Random with return math.random(10, 50)
 --function delay()
---    return 50
+--    return 10
 --end
 
 -- example reporting script which demonstrates a custom

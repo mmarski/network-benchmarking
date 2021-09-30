@@ -107,6 +107,7 @@ def parse_files(graph_options, stats_dict):
 def parse_graph_options(file):
   # Dictionary stores all options
   return_dict = {}
+  return_dict["TITLE"] = ""
   # Different subplots are stored in this array of arrays, the inside arrays containing columns and outer the rows
   # Eli: Sisempään lisättäessä dictejä, mennään vasemmalta oikealle. Ulos lisättäessä mennään alas.
   # TODO: argument COLUMNS to determine the width of SUBPLOTS: done
@@ -383,18 +384,18 @@ def plot_cpu_usage(ax, ax2, stats_dict, graph_options):
       width=0.2
       if "client" in key:
         ax.bar(graph_options["XAXIS-N"]-width/2, value, width, bottom=prev_client_val,
-                label=key.split("-client")[0], color=colors[key.split("-")[0]])
+                label=key, color=colors[key.split("-")[0]])
         prev_client_val = (value if prev_client_val is None else np.add(prev_client_val, value))
       elif "server" in key:
         ax.bar(graph_options["XAXIS-N"]+width/2, value, width, bottom=prev_server_val,
-                label=key.split("-server")[0], color=colors[key.split("-")[0]])
+                label=key, color=colors[key.split("-")[0]])
         prev_server_val = (value if prev_server_val is None else np.add(prev_server_val, value))
       else:
         ax.bar(graph_options["XAXIS"], value, width, bottom=prev_val, label=key)
     prev_val = (value if prev_val is None else np.add(prev_val, value))
   
 
-
+# TODO iperfille max,min,mean plotterit per runi ja tämä olisi plot_full_iperf
 def plot_iperf(ax, stats_dict, graph_options):
   # TODO If stats_dict files has multiple files, then do something else. First, just plot one test
   # Loop through "intervals" list, get "streams" first list item
@@ -409,8 +410,8 @@ def plot_iperf(ax, stats_dict, graph_options):
     interval_arr = []
     for interval in value["intervals"]:
       if "latency" in graph_options["ARGS"]:
-        print("TODO iperf latencies to milliseconds")
-        interval_arr.append(interval["streams"][0]["rtt"])
+        print("iperf latencies also in milliseconds")
+        interval_arr.append(interval["streams"][0]["rtt"] / 1000)
       else:
         interval_arr.append(interval["streams"][0]["bits_per_second"] / 1000000)
     #value["end"]
@@ -471,7 +472,7 @@ def main():
   # Tarvii joka plotille oman dictionaryn ja sit ajaa vaan tän saman setin jokaiselle parsinnan jälkeen
   # Plotter optionsissa jollakin keywordilla vaihtuu toisen subplotin inffoksi, ne jakaa kuitenkin titlen esim
   # TODO figsize change for multiple subplots? Kato miltä ne näyttää eka
-  plt.rcParams["figure.figsize"] = (10, 6) # 9, 6
+  plt.rcParams["figure.figsize"] = (10 * len(graph_options["SUBPLOTS"][0]), 6 * len(graph_options["SUBPLOTS"])) # 9, 6
   # TODO: variable subplots from the options
   print("DEBUGINFO", len(graph_options["SUBPLOTS"]), len(graph_options["SUBPLOTS"][0]))
   # Squeeze=False: always give us a 2D array for use here, even if only one graph
@@ -483,7 +484,7 @@ def main():
       graphs = 0 # How many graphs drawn
 
       if "cpu" in graph["ARGS"] or "cpu-mean" in graph["ARGS"]: # DO NOT use with throughput ! it already creates ax2 twinx
-        if len(graph["ARGS"]) > 1:# graphs > 0: # This already means that there are per-run graphs and we need mean CPU usage!
+        if len(graph["ARGS"]) > 2:# 2 as if more than ARGS cpu and cpu-mean # graphs > 0: # This already means that there are per-run graphs and we need mean CPU usage!
           ax2 = axes[ri][ci].twinx()
         # TODO tää on vielä tekemättä !! Ja poista cpu tosta ylemmästä eliffistä!
         # Tän operaation jälkeen tän voisi lyyä Nokia Gittiin turvaan muute! Tai vähintään Driveen ekaks
@@ -529,7 +530,10 @@ def main():
         # Shrink the graph for legends
         box = axes[ri][ci].get_position()
         axes[ri][ci].set_position([box.x0, box.y0, box.width * 0.95, box.height])
-        axes[ri][ci].legend(bbox_to_anchor=(1.035,1))
+        legend_title = ""
+        if "cpu-mean" in graph["ARGS"]:
+          legend_title = "CPU:\nclient&server"
+        axes[ri][ci].legend(bbox_to_anchor=(1.035,1), title=legend_title)
         if ax2 is not None:
           if all(x in ["user", "kernel", "sw-int"] for x in graph["CPU-METRICS"]):
             legend_elements = [Line2D([0], [0], color='m', lw=4, alpha=0.5, label='User'),
@@ -537,7 +541,7 @@ def main():
                               Line2D([0], [0], color='c', lw=4, alpha=0.5, label='SW-int')]
             ax2.legend(title="CPU:\nclient&server", handles=legend_elements, bbox_to_anchor=(1.035,0.4))
           else:
-            ax2.legend(title="CPU usage of\nclient&server")
+            ax2.legend(title="CPU:\nclient&server")
           #handles, labels = ax2.get_legend_handles_labels()
           #ax2.legend(list(set(handles)), list(set(labels)), title="CPU usage,\nclient&server")
       if "XAXIS" in graph:
