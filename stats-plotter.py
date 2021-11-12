@@ -39,7 +39,11 @@ def parse_cpu_data(lines):
   # List for each stat for CPU, such as usage percentage of user, kernel, interrupt etc.
   return_dict["CPU"] = [[] for i in range(7)]
   for line in lines:
-    items = [float(x) for x in line.replace(',', '.').split(' ')]
+    split = line.replace(',', '.').split(' ')
+    if len(split) < 2: # Empty or malformed line
+      continue
+    items = [float(x) for x in split]
+
     for i, perc in enumerate(items):
       return_dict["CPU"][i].append(perc)
 
@@ -51,15 +55,21 @@ def parse_cpu_data(lines):
   return return_dict
 
 # NPtcp output
-def parse_netpipe_data(lines):
+def parse_netpipe_data(lines, graph_args):
   return_dict = {"NP-BYTES": [], "NP-THROUGHPUT": [], "NP-LATENCY": []}
   for line in lines:
     split = line.rstrip().split()
     return_dict["NP-BYTES"].append(int(split[0]))
-    # What value?
-    return_dict["NP-THROUGHPUT"].append(float(split[1]))
-    # Milliseconds
-    return_dict["NP-LATENCY"].append(float(split[2]) * 1000)
+    # Mbps
+    tp = float(split[1])
+    if "gbps" in graph_args:
+      tp /= 1000
+    return_dict["NP-THROUGHPUT"].append(tp)
+    # Seconds converted to Milliseconds
+    lat = float(split[2]) * 1000
+    if "us" in graph_args:
+      lat *= 1000
+    return_dict["NP-LATENCY"].append(lat)
   return return_dict
 
 # Infiniband perftest output
@@ -73,52 +83,73 @@ def parse_ib_perftest_data(lines, graph_args):
     elif readflag:
       split = line.rstrip().split()
       # We don't need more bytes than 1M test, stop at most 2M
-      if int(split[0]) > 2000000:
+      # Also skip empty lines or lines with dashes
+      if split[0] == "" or "-" in split[0] or int(split[0]) > 2000000:
         continue
       if "latency" in graph_args:
         # TODO check latency or bandwidth mode here. Append to the arrays accordingly, create all dem arrays anyway at the top there.
         # For latency e.g. ib_send_lat:
         # #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+        ms_modifier = 1
+        if "us" not in graph_args:
+          ms_modifier = 1000
         return_dict["IB-BYTES"].append(int(split[0]))
-        return_dict["MIN"].append(float(split[2]))
-        return_dict["MAX"].append(float(split[3]))
-        return_dict["TYPICAL"].append(float(split[4]))
-        return_dict["MEAN"].append(float(split[5]))
-        return_dict["STDEV"].append(float(split[6]))
-        return_dict["99%"].append(float(split[7]))
-        return_dict["99.9%"].append(float(split[8]))
+        return_dict["MIN"].append(float(split[2]) / ms_modifier)
+        return_dict["MAX"].append(float(split[3]) / ms_modifier)
+        return_dict["TYPICAL"].append(float(split[4]) / ms_modifier)
+        return_dict["MEAN"].append(float(split[5]) / ms_modifier)
+        return_dict["STDEV"].append(float(split[6]) / ms_modifier)
+        return_dict["99%"].append(float(split[7]) / ms_modifier)
+        return_dict["99.9%"].append(float(split[8]) / ms_modifier)
       elif "throughput" in graph_args:
         # Bandwidth e.g. ib_send_bw -a
         # #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
         return_dict["IB-BYTES"].append(int(split[0]))
-        return_dict["BW-PEAK"].append(float(split[2]))
-        return_dict["BW-AVG"].append(float(split[3]))
+        gbps_modifier = 1
+        if "gbps" in graph_args:
+          gbps_modifier = 1000
+        # Convert to bits per s
+        return_dict["BW-PEAK"].append(float(split[2]) * 8 / gbps_modifier)
+        return_dict["BW-AVG"].append(float(split[3]) * 8 / gbps_modifier)
         return_dict["BW-MPPS"].append(float(split[4]))
+      else:
+        print("ERROR: No argument 'latency' or 'throughput' specified for IB perftest parsing")
+        exit(1)
   return return_dict
 
 # Sockperf output parsing, tailored for it
-def parse_sockperf_data(lines):
+def parse_sockperf_data(lines, graph_args):
   return_dict = {}
   phase = 0 # Read the file in phases, ignoring keywords before their time comes
   for line in lines:
-    if "avg-latency" in line and phase==0:
-      split = line.rstrip().split()
-      return_dict["MEAN"] = float(split[2].split('=')[1])
-      return_dict["STDEV"] = float(split[3].split('=')[1].split(')')[0])
-      phase += 1
-    elif "MAX" in line and phase == 1:
-      return_dict["MAX"] = float(line.split('=')[1].lstrip().rstrip())
-      phase += 1
-    elif phase > 1:
-      if "percentile" in line:
-        percentile = line.split()[3]
-        percentile = percentile.rstrip('0')
-        if percentile.endswith('.'):
-          percentile = percentile.rstrip('.')
-        return_dict[percentile+"%"] = float(line.split('=')[1].strip())
-      elif "MIN" in line:
-        return_dict["MIN"] = float(line.split('=')[1].strip())
-        phase = -1
+    if "latency" in graph_args:
+      if "avg-latency" in line and phase==0:
+        split = line.rstrip().split()
+        return_dict["MEAN"] = float(split[2].split('=')[1])
+        return_dict["STDEV"] = float(split[3].split('=')[1].split(')')[0])
+        phase += 1
+      elif "MAX" in line and phase == 1:
+        return_dict["MAX"] = float(line.split('=')[1].lstrip().rstrip())
+        phase += 1
+      elif phase > 1:
+        if "percentile" in line:
+          percentile = line.split()[3]
+          percentile = percentile.rstrip('0')
+          if percentile.endswith('.'):
+            percentile = percentile.rstrip('.')
+          return_dict[percentile+"%"] = float(line.split('=')[1].strip())
+        elif "MIN" in line:
+          return_dict["MIN"] = float(line.split('=')[1].strip())
+          phase = -1
+    elif "throughput" in graph_args:
+      if "Summary:" in line and phase==0:
+        return_dict["MSGRATE"] = int(line.split("[msg/sec]")[0].split()[-1].strip())
+        phase += 1
+      elif phase > 0:
+        return_dict["THROUGHPUT"] = float(line.split()[-2].strip('('))
+    else:
+      print("ERROR: No argument 'latency' or 'throughput' specified for sockperf parsing")
+      exit(1)
   return return_dict
 
 # parse wrk and CPU files in their data functions
@@ -134,31 +165,36 @@ def parse_files(graph_options, stats_dict):
     for graphopt in row:
       # Each graph gets its own ordered dict
       graphopt["STATS"] = OrderedDict()
+      # If another directory specified. This directory is then used for all future files until specified again
+      if "FILEDIR" in graphopt:
+        filedir = graphopt["FILEDIR"] + "/"
       for f in graphopt["STATFILES"]:#list(files):
         with open("./" + filedir + f, "r") as statfile:
-          lines = statfile.readlines() # If problem with iperf: Check if this interferes with "json.load(statfile)"
-          if "iperf" in graphopt["ARGS"]:
+          # Now parse the files based on the keyword in their file name
+          if "iperf" in f: # graphopt["ARGS"]:
             # Put everything in iperf JSON to dict
             graphopt["STATS"][f] = json.load(statfile)
-          elif "netpipe" in graphopt["ARGS"]:
-            graphopt["STATS"][f] = parse_netpipe_data(lines)
-          elif "sockperf" in graphopt["ARGS"]:
-            graphopt["STATS"][f] = parse_sockperf_data(lines)
-          elif "ib" in graphopt["ARGS"]:
-            graphopt["STATS"][f] = parse_ib_perftest_data(lines, graphopt["ARGS"])
-            # Use the array of bytes transferred as x-axis
-            if not "XAXIS" in graphopt:
-              print("Using bytes transferred from IB test as XAXIS, assuming same values for all")
-              graphopt["XAXIS"] = graphopt["STATS"][f]["IB-BYTES"]
-          else: # Default: wrk benchmark data
-            #name = ""
-            #if stat_type == "wrk":
-            #  # Get second row: eg. "1 threads and 10 connections", as graph name
-            #  name = lines[1].lstrip().rstrip()
-            #else:
-            # Use file name
-            graphopt["STATS"][f] = parse_wrk_data(lines)
-      # TODO: jos ei ole CPU filuja määritelty, mutta ARG cpu on, hae cpu filet wrkfilejen perusteella! done
+          else:
+            lines = statfile.readlines() # Interferes with "json.load(statfile)" so done here
+            if "netpipe" in f:
+              graphopt["STATS"][f] = parse_netpipe_data(lines, graphopt["ARGS"])
+            elif "sockperf" in f:
+              graphopt["STATS"][f] = parse_sockperf_data(lines, graphopt["ARGS"])
+            elif "ib" in graphopt["ARGS"]:
+              graphopt["STATS"][f] = parse_ib_perftest_data(lines, graphopt["ARGS"])
+              # Use the array of bytes transferred as x-axis
+              if not "XAXIS" in graphopt:
+                print("Using bytes transferred from IB test as XAXIS, assuming same values for all")
+                graphopt["XAXIS"] = graphopt["STATS"][f]["IB-BYTES"]
+            else: # Default: wrk benchmark data
+              #name = ""
+              #if stat_type == "wrk":
+              #  # Get second row: eg. "1 threads and 10 connections", as graph name
+              #  name = lines[1].lstrip().rstrip()
+              #else:
+              # Use file name
+              graphopt["STATS"][f] = parse_wrk_data(lines)
+      # done: jos ei ole CPU filuja määritelty, mutta ARG cpu on, hae cpu filet wrkfilejen perusteella! done
       # Eli luo filesistä uusi lista, jossa haetaan joka filulla pääte -CPU-client ja -CPU-server
       # Pidä huoli järjestyksestä koska siinä orderissa data esitetään.. Tai tarkista file name (stats_dict key) kumpi se on kun graafataan
       # Ehkä jopa voisi laittaa CPU filet itse wrk filun stats_dict entryn alle jotta ainakin olis koherentti
@@ -177,8 +213,7 @@ def parse_files(graph_options, stats_dict):
       for f in graphopt["CPUFILES"]:
         with open("./" + filedir + f, "r") as statfile:
           lines = statfile.readlines()
-          name = f
-          graphopt["STATS"][name] = parse_cpu_data(lines)
+          graphopt["STATS"][f] = parse_cpu_data(lines)
 
   return 0
 
@@ -218,7 +253,6 @@ def parse_graph_options(file):
   return_dict["SUBPLOTS"][0][0]["ARGS"] = []
   # should we make a filedir for each graph? global for now
   return_dict["FILEDIR"] = None # If stat files in different directory
-  # TODO argumentteihin: ARG us, mikrosekunneille
 
   read_filenames = False
   read_cpu_filenames = False
@@ -262,7 +296,7 @@ def parse_graph_options(file):
         elif split[0] in ["TITLE", "TITLE2", "FILENAME", "FILEDIR"]:
           return_dict[split[0]] = split[1].rstrip()
         # Axes and labels
-        elif split[0] in ["AXES", "XAXIS", "LABELS"]:
+        elif split[0] in ["AXES", "XAXIS", "LABELS", "COMPARE", "ANNOTATE"]:
           return_dict["SUBPLOTS"][cur_row][cur_col][split[0]] = split[1].rstrip().split(',')
         # The amount of columns if multiple subplots
         elif split[0] == "COLUMNS":
@@ -285,6 +319,11 @@ def parse_graph_options(file):
           return_dict["SUBPLOTS"][cur_row][cur_col]["STATFILES"] = []
           return_dict["SUBPLOTS"][cur_row][cur_col]["CPUFILES"] = []
           return_dict["SUBPLOTS"][cur_row][cur_col]["ARGS"] = []
+        # The keyword FILEDIR can be used again (or instead of global) after the keywords FILES or CPUFILES, to again specify a directory
+        # This directory will be used for all files until the keyword is used again
+        elif line.startswith("FILEDIR"):
+          split = line.split(' ', 1)
+          return_dict["SUBPLOTS"][cur_row][cur_col]["FILEDIR"] = split[1].rstrip()
         # Filename read mode last per plot. Switch to another file mode with a keyword
         elif read_filenames:
           if line.rstrip() == "": # Skip empty line
@@ -318,27 +357,37 @@ def parse_graph_options(file):
 
 # TODO hmm, moni näistä voisi lisätä yhteen funktioon joka käy läpi kaikki asetukset max,min,mean jne
 # Nää kaikki suorittaa saman operaation..
+
+# TODO remove, combined in one function below
+'''
 def plot_max_latencies(ax, stats_dict, graph_options):
   max_arr = []
   for key, value in stats_dict.items():
     if "CPU" in key: # Don't go through CPU stat files
         continue
+    max_val = value["MAX"]
     # Convert to milliseconds
-    max_arr.append(value["MAX"] / 1000)
+    if "us" not in graph_options["ARGS"]:
+      max_val /= 1000
+    max_arr.append(max_val)
   
   ax.plot(graph_options["XAXIS"], max_arr, label="Max")
   # Annotate if no 99.999th percentile graph
   if not "percentiles" in graph_options["ARGS"] or not "99.999" in graph_options["PERCENTILES"]:
     for i, value in enumerate(max_arr):
       ax.annotate(round(value, 2), (graph_options["XAXIS"][i], max_arr[i]))
-  
+
+# TODO compare
 def plot_min_latencies(ax, stats_dict, graph_options):
   min_arr = []
   for key, value in stats_dict.items():
     if "CPU" in key: # Don't go through CPU stat files
         continue
+    min_val = value["MIN"]
     # Convert to milliseconds
-    min_arr.append(value["MIN"] / 1000)
+    if "us" not in graph_options["ARGS"]:
+      min_val /= 1000
+    min_arr.append(min_val)
   
   ax.plot(graph_options["XAXIS"], min_arr, label="Min")
 
@@ -346,69 +395,218 @@ def plot_min_latencies(ax, stats_dict, graph_options):
     ax.annotate(round(value, 2), (graph_options["XAXIS"][i], min_arr[i]))
 
 def plot_mean_latencies(ax, stats_dict, graph_options):
+  labels_arr = [""]
+  idx = 0
   # Mean with standard deviation
-  mean_arr = []
-  stdev_arr = []
+  mean_arr = [[]]
+  stdev_arr = [[]]
+  if "COMPARE" in graph_options:
+    labels_arr[0] = graph_options["COMPARE"][0]
+    for i in range(len(graph_options["COMPARE"])-1):
+      mean_arr.append([])
+      stdev_arr.append([])
+      labels_arr.append(graph_options["COMPARE"][i+1])
   for key, value in stats_dict.items():
     if "CPU" in key: # Don't go through CPU stat files
         continue
+    # NEW THING: Compare runs by keywords, determine with e.g. COMPARE wrk-run1,wrk-run2, where wrk-run1 and wrk-run2 can be found in group's file names
+    if "COMPARE" in graph_options:
+      for i, c in enumerate(graph_options["COMPARE"]):
+        if c in key:
+          idx = i
+          break
+    mean = value["MEAN"]
+    stdev = value["STDEV"]
     # Convert to milliseconds
-    mean_arr.append(value["MEAN"] / 1000)
-    stdev_arr.append(value["STDEV"] / 1000)
+    if "us" not in graph_options["ARGS"]:
+      mean /= 1000
+      stdev /= 1000
+    mean_arr[idx].append(mean)
+    stdev_arr[idx].append(stdev)
   
-  #ax.plot(graph_options["XAXIS"], mean_arr, label="Mean")
-  ax.errorbar(graph_options["XAXIS"], mean_arr, yerr=stdev_arr, capsize=6, color="darkslategray", label="Mean")
+  for i, l in enumerate(labels_arr):
+    if "LABELS" in graph_options and len(graph_options["LABELS"]) == len(labels_arr):
+      l = graph_options["LABELS"][i]
+    if len(labels_arr) == 1:
+      ax.errorbar(graph_options["XAXIS"], mean_arr[i], yerr=stdev_arr[i], capsize=6, color="darkslategray", label=l+" Mean")
+    else:
+      ax.plot(graph_options["XAXIS"], mean_arr[i], label=l+" Mean")
 
-  for i, value in enumerate(mean_arr):
-    ax.annotate(round(value, 2), (graph_options["XAXIS"][i], mean_arr[i]))
+    for j, value in enumerate(mean_arr[i]):
+      ax.annotate(round(value, 2), (graph_options["XAXIS"][j], mean_arr[i][j]))
+'''
+
+def plot_latencies_maxminmean(ax, stats_dict, graph_options):
+  labels_arr = [""]
+  idx = 0
+  max_arr = [[]]
+  min_arr = [[]]
+  # Mean with standard deviation
+  mean_arr = [[]]
+  stdev_arr = [[]]
+  if "COMPARE" in graph_options:
+    labels_arr[0] = graph_options["COMPARE"][0]
+    for i in range(len(graph_options["COMPARE"])-1):
+      max_arr.append([])
+      min_arr.append([])
+      mean_arr.append([])
+      stdev_arr.append([])
+      labels_arr.append(graph_options["COMPARE"][i+1])
+
+  for key, value in stats_dict.items():
+    if "CPU" in key: # Don't go through CPU stat files
+        continue
+    # NEW THING: Compare runs by keywords, determine with e.g. COMPARE wrk-run1,wrk-run2, where wrk-run1 and wrk-run2 can be found in group's file names. Match first
+    if "COMPARE" in graph_options:
+      for i, c in enumerate(graph_options["COMPARE"]):
+        if c in key:
+          idx = i
+          break
+    mean = value["MEAN"]
+    stdev = value["STDEV"]
+    min = value["MIN"]
+    max = value["MAX"]
+    # Microseconds specifier check
+    if "us" not in graph_options["ARGS"]:
+      mean /= 1000
+      stdev /= 1000
+      max /= 1000
+      min /= 1000
+    max_arr[idx].append(max)
+    min_arr[idx].append(min)
+    mean_arr[idx].append(mean)
+    stdev_arr[idx].append(stdev)
+
+  for i, l in enumerate(labels_arr):
+    if "LABELS" in graph_options and len(graph_options["LABELS"]) == len(labels_arr):
+      l = graph_options["LABELS"][i]
+
+    if "max" in graph_options["ARGS"]:
+      ax.plot(graph_options["XAXIS"], max_arr[i], label=l+" Max")
+    if "min" in graph_options["ARGS"]:
+      ax.plot(graph_options["XAXIS"], min_arr[i], label=l+" Min")
+    if "mean" in graph_options["ARGS"]:
+      if len(labels_arr) == 1:
+        ax.errorbar(graph_options["XAXIS"], mean_arr[i], yerr=stdev_arr[i], capsize=6, color="darkslategray", label=l+" Mean")
+      else:
+        ax.plot(graph_options["XAXIS"], mean_arr[i], label=l+" Mean")
+
+    # Annotation filter
+    if "ANNOTATE" not in graph_options or ("ANNOTATE" in graph_options and l in graph_options["ANNOTATE"]):
+      if "mean" in graph_options["ARGS"]:
+        for j, value in enumerate(mean_arr[i]):
+          ax.annotate(round(value, 2), (graph_options["XAXIS"][j], mean_arr[i][j]))
+      if "min" in graph_options["ARGS"]:
+        for j, value in enumerate(min_arr[i]):
+          ax.annotate(round(value, 2), (graph_options["XAXIS"][j], min_arr[i][j]))
+      # Annotate max if no 99.999th percentile graph
+      if "max" in graph_options["ARGS"] and (not "percentiles" in graph_options["ARGS"] or not "99.999" in graph_options["PERCENTILES"]):
+        for j, value in enumerate(max_arr[i]):
+          ax.annotate(round(value, 2), (graph_options["XAXIS"][j], max_arr[i][j]))
+
 
 def plot_percentiles(ax, stats_dict, graph_options):
-  percentile_dict = {}
+  labels_arr = [""]
+  percentile_dicts = [{}]
+  idx = 0
   #for perc in graph_options["PERCENTILES"]: # Wanha: looppas tästä ensin, nyt toisi päi
   #  percentile_dict[perc + "%"] = []
+  if "COMPARE" in graph_options:
+    labels_arr[0] = graph_options["COMPARE"][0]
+    for i in range(len(graph_options["COMPARE"])-1):
+      percentile_dicts.append({})
+      labels_arr.append(graph_options["COMPARE"][i+1])
   for key, value in stats_dict.items():
     if "CPU" in key: # Don't go through CPU stat files
       continue
+    # NEW THING: Compare runs by keywords, determine with e.g. COMPARE wrk-run1,wrk-run2, where wrk-run1 and wrk-run2 can be found in group's file names
+    if "COMPARE" in graph_options:
+      for i, c in enumerate(graph_options["COMPARE"]):
+        if c in key:
+          idx = i
+          break
     for perc in graph_options["PERCENTILES"]:
       if perc+"%" not in value:
         print("ERROR: percentile", perc+"%", "is not found in data for", key)
         return
-      if perc+"%" not in percentile_dict:
-        percentile_dict[perc + "%"] = []
+      if perc+"%" not in percentile_dicts[idx]:
+        percentile_dicts[idx][perc + "%"] = []
       latency_val = value[perc + "%"]
       # Convert to milliseconds
-      latency_val /= 1000
-      percentile_dict[perc + "%"].append(latency_val)
-  for key, value in percentile_dict.items():
-    ax.plot(graph_options["XAXIS"], value, label=key)
+      if "us" not in graph_options["ARGS"]:
+        latency_val /= 1000
+      percentile_dicts[idx][perc + "%"].append(latency_val)
 
-    for i, val in enumerate(value):
-      ax.annotate(round(val, 2), (graph_options["XAXIS"][i], value[i]))
+  for i, l in enumerate(labels_arr):
+    if "LABELS" in graph_options and len(graph_options["LABELS"]) == len(labels_arr):
+      l = graph_options["LABELS"][i]
+    for key, value in percentile_dicts[i].items():
+      ax.plot(graph_options["XAXIS"], value, label=l+" "+key)
+
+      # Annotation filter
+      if "ANNOTATE" not in graph_options or ("ANNOTATE" in graph_options and l in graph_options["ANNOTATE"]):
+        for j, val in enumerate(value):
+          ax.annotate(round(val, 2), (graph_options["XAXIS"][j], value[j]))
 
 
-# TODO !! Standardisoitu funktio, joka osaa piirtää sekä wrk, että Sockperf throughputin. Tarvitaan vaan bits per second bandwidth eri runeista.
-def plot_wrk_throughput(ax, ax2, stats_dict, graph_options):
+# done :) Standardisoitu funktio, joka osaa piirtää sekä wrk, että Sockperf throughputin. Tarvitaan vaan bits per second bandwidth eri runeista.
+def plot_throughput(ax, ax2, stats_dict, graph_options):
   #graph_dict = {}
   #graph_dict["Throughput"] = []
   #graph_dict["Requests"] = []
-  throughput_arr = []
-  requests_arr = []
+  throughput_arr = [[]]
+  #requests_arr = [[]]
+  msgrate_arr = [[]] # Messages per second
+  labels_arr = [""] # get these from COMPARE
+  idx = 0
+  print("Msgrate = Mega-messages-per-second!")
+  if "COMPARE" in graph_options:
+    labels_arr[0] = graph_options["COMPARE"][0]
+    for i in range(len(graph_options["COMPARE"])-1):
+      throughput_arr.append([])
+      msgrate_arr.append([])
+      labels_arr.append(graph_options["COMPARE"][i+1])
   for key, value in stats_dict.items():
-    throughput_arr.append(value["BYTES"])
-    requests_arr.append(value["REQUESTS"])
-    # TODO !! We want (MB/s) value, modify accordingly: BYTES / DURATION / 1000000
+    # NEW THING: Compare runs by keywords, determine with e.g. COMPARE wrk-run1,wrk-run2, where wrk-run1 and wrk-run2 can be found in group's file names
+    if "COMPARE" in graph_options:
+      for i, c in enumerate(graph_options["COMPARE"]):
+        if c in key:
+          idx = i
+          break
+    if "wrk" in key:
+      throughput = value["BYTES"] * 8 / value["DURATION"] # Mb / s (1 / micro = Mega)
+      if "gbps" in graph_options["ARGS"]:
+        throughput /= 1000
+      print(throughput)
+      print(value["REQUESTS"], "/", value["DURATION"])
+      throughput_arr[idx].append(throughput) # toka / 1000000 Mbps?
+      msgrate_arr[idx].append(value["REQUESTS"] / value["DURATION"]) # mega-messages-per-sec
+    elif "sockperf" in key:
+      throughput = value["THROUGHPUT"]
+      if "gbps" in graph_options["ARGS"]:
+        throughput /= 1000
+      throughput_arr[idx].append(throughput)
+      msgrate_arr[idx].append(value["MSGRATE"] / 1000000) # Mega-messages-per-second
+    #throughput_arr.append(value["BYTES"])
+    #requests_arr.append(value["REQUESTS"])
+    # done Mbps. We want (MB/s) value, modify accordingly: BYTES / DURATION / 1000000
     # Achsually we want Mbps / Gbps
     # Delete requests and second axis
+  for i, l in enumerate(labels_arr):
+    if "LABELS" in graph_options and len(graph_options["LABELS"]) == len(labels_arr):
+      l = graph_options["LABELS"][i]
+    try:
+      ax.plot(graph_options["XAXIS"], throughput_arr[i], label=l+" TP")
+      ax2.plot(graph_options["XAXIS"], msgrate_arr[i], linestyle="dashed", label=l+" Msgrate")
+    except ValueError:
+      print("Value ERROR", i, l, graph_options["XAXIS"], throughput_arr[i], msgrate_arr[i])
+      exit(1)
 
-  ax.plot(graph_options["XAXIS"], throughput_arr, label="Throughput")
-  ax2.plot(graph_options["XAXIS"], requests_arr, label="Requests")
-
-  for i, val in enumerate(throughput_arr):
-    ax.annotate(val, (graph_options["XAXIS"][i], throughput_arr[i]))
+    for j, val in enumerate(throughput_arr[i]):
+      ax.annotate(round(val, 2), (graph_options["XAXIS"][j], throughput_arr[i][j]))
   #for i, val in enumerate(requests_arr):
   #  ax2.annotate(val, (graph_options["XAXIS"][i], requests_arr[i]))
 
-# AND TODO: plot_sockperf_throughput
 
 
 def plot_cpu_usage(ax, ax2, stats_dict, graph_options):
@@ -502,39 +700,97 @@ def plot_cpu_usage(ax, ax2, stats_dict, graph_options):
     prev_val = (value if prev_val is None else np.add(prev_val, value))
 
 
-# TODO iperfille max,min,mean plotterit per runi ja tämä olisi plot_full_iperf
+# Iperfille max,min,mean plotterit per runi ja tämä olisi plot_full_iperf? Well, this has everything now
 def plot_iperf(ax, stats_dict, graph_options):
   # TODO If stats_dict files has multiple files, then do something else. First, just plot one test
   # Loop through "intervals" list, get "streams" first list item
   # - get bits per sec and RTT and add to list in dict
   # Key "end": get mean, max, min RTT
-  print("IPERF is TODO!!")
+
   # TODO Uus:
   # Voidaan käydä läpi kaikki ne sekunnin välein olevat JSON setit, ja laskea niistä ite keskiarvo. Ellei sitä tietysti lue suoraan jossain JSONissa.
   # Standardisoisko vaikka kaikki bandwidthit bittiä sekunnissa? Kun me tiedetään että linkki max on 25Gbps. Voidaan parametrillä laittaa MB/s halutessa.
-  graph_dict = {}
-  graphlabel = "Throughput"
+  labels_arr = [""] # get these from COMPARE
+  throughput_arr = [[]]
+  max_rtt_arr = [[]]
+  mean_rtt_arr = [[]]
+  min_rtt_arr = [[]]
   index = 0
-  if "latency" in graph_options["ARGS"]:
-    graphlabel = "RTT"
+
+  if "COMPARE" in graph_options and not "timeline" in graph_options["ARGS"]:
+    labels_arr[0] = graph_options["COMPARE"][0]
+    for i in range(len(graph_options["COMPARE"])-1):
+      throughput_arr.append([])
+      max_rtt_arr.append([])
+      mean_rtt_arr.append([])
+      min_rtt_arr.append([])
+      labels_arr.append(graph_options["COMPARE"][i+1])
+
   for key, value in stats_dict.items():
-    interval_arr = []
-    for interval in value["intervals"]:
+    # timeline arg: plot the throughput seen each second during the test: X-axis e.g. 1-10 seconds. Making a graph for one run each
+    if "timeline" in graph_options["ARGS"]:
+      interval_arr = []
+      for interval in value["intervals"]:
+        if "latency" in graph_options["ARGS"]:
+          rtt = interval["streams"][0]["rtt"]
+          if "us" not in graph_options["ARGS"]:
+            rtt /= 1000
+          interval_arr.append(rtt)
+        else:
+          # Megabits ps
+          throughput = interval["streams"][0]["bits_per_second"] / 1000000
+          if "gbps" in graph_options["ARGS"]:
+            throughput = throughput / 1000
+          interval_arr.append(throughput)
+      #value["end"]
+    
+      lbl = key
+      if "LABELS" in graph_options:
+        lbl = graph_options["LABELS"][index]
+      #for i, value in enumerate(interval_arr):
+      ax.plot(list(range(1, len(interval_arr)+1)), interval_arr, label=lbl)#graph_options["XAXIS"], interval_arr, label=key)
+
+      for i, val in enumerate(interval_arr):
+        ax.annotate(round(val, 2), (i+1, val))#(graph_options["XAXIS"][i], val))
+      
+      index += 1
+    else:
+      if "COMPARE" in graph_options:
+        for i, c in enumerate(graph_options["COMPARE"]):
+          if c in key:
+            index = i
+            break
+      # Plot the throughput according to the end values of each run, making a graph made of different runs
+      # Megabits ps
+      throughput = value["end"]["streams"][0]["sender"]["bits_per_second"] / 1000000
+      if "gbps" in graph_options["ARGS"]:
+        throughput = throughput / 1000
+      throughput_arr[index].append(throughput)
+      us_modifier = 1000
+      if "us" in graph_options["ARGS"]:
+        us_modifier = 1
+      max_rtt_arr[index].append(value["end"]["streams"][0]["sender"]["max_rtt"] / us_modifier)
+      mean_rtt_arr[index].append(value["end"]["streams"][0]["sender"]["mean_rtt"] / us_modifier)
+      min_rtt_arr[index].append(value["end"]["streams"][0]["sender"]["min_rtt"] / us_modifier)
+
+  # TODO -- Graph the different iperf runs!
+  # How to COMPARE? How did it work? Do we need nested arrays? MAyyyybe (unou min rtt arr jne joka comparoitavalle asialle)
+  if not "timeline" in graph_options["ARGS"]:
+    for i, lbl in enumerate(labels_arr):
+      if "LABELS" in graph_options and len(graph_options["LABELS"]) == len(labels_arr):
+        lbl = graph_options["LABELS"][i]
       if "latency" in graph_options["ARGS"]:
-        print("iperf latencies also in milliseconds")
-        interval_arr.append(interval["streams"][0]["rtt"] / 1000)
+        ax.plot(graph_options["XAXIS"], min_rtt_arr[i], label=lbl+" Min")
+        ax.plot(graph_options["XAXIS"], max_rtt_arr[i], label=lbl+" Max")
+        ax.plot(graph_options["XAXIS"], mean_rtt_arr[i], label=lbl+" Mean")
+        for j, val in enumerate(mean_rtt_arr[i]):
+          ax.annotate(round(val, 2), (graph_options["XAXIS"][j], mean_rtt_arr[i][j]))
       else:
-        interval_arr.append(interval["streams"][0]["bits_per_second"] / 1000000)
-    #value["end"]
-  
-    #for i, value in enumerate(interval_arr):
-    ax.plot(list(range(1, len(interval_arr)+1)), interval_arr, label=key)#graph_options["XAXIS"], interval_arr, label=key)
+        ax.plot(graph_options["XAXIS"], throughput_arr[i], label=lbl)
+        for j, val in enumerate(throughput_arr[i]):
+          ax.annotate(round(val, 2), (graph_options["XAXIS"][j], throughput_arr[i][j]))
 
-    for i, val in enumerate(interval_arr):
-      ax.annotate(round(val, 2), (i+1, val))#(graph_options["XAXIS"][i], val))
-    index += 1
-
-def plot_netpipe(ax, stats_dict, graph_options): # TODO wat miksei tää toimi? menee 0..1, joku vika X axis NP-BYTES
+def plot_netpipe(ax, stats_dict, graph_options):
   index = 0
   for key, value in stats_dict.items():
     #for i,b in enumerate(value["NP-BYTES"]):
@@ -542,14 +798,23 @@ def plot_netpipe(ax, stats_dict, graph_options): # TODO wat miksei tää toimi? 
     lbl = key
     if "LABELS" in graph_options:
       lbl = graph_options["LABELS"][index]
-    ax.plot(value["NP-BYTES"], value["NP-LATENCY"], label=lbl)
-    #ax2.plot(value["NP-BYTES"], value["NP-THROUGHPUT"], label="Throughput")
+    if "latency" in graph_options["ARGS"]:
+      ax.plot(value["NP-BYTES"], value["NP-LATENCY"], label=lbl) # usec or ms determined in parsing
+    elif "throughput" in graph_options["ARGS"]:
+      ax.plot(value["NP-BYTES"], value["NP-THROUGHPUT"], label=lbl) # Mbps or Gbps determined in parsing
+    else:
+      print("ERROR: No argument 'latency' or 'throughput' specified for netpipe plotting")
+      exit(1)
 
-    annotate_these = [1, 4, 32, 64, 256, 2048, 8192, 32768, 131072, 524288, 1048576]
-    for i, bytes in enumerate(value["NP-BYTES"]):
-      if bytes in annotate_these:
-        print(bytes)
-        ax.annotate(round(value["NP-LATENCY"][i], 2), (bytes, value["NP-LATENCY"][i]))
+    if "ANNOTATE" not in graph_options or ("ANNOTATE" in graph_options and lbl in graph_options["ANNOTATE"]):
+      annotate_these = [1, 4, 32, 64, 256, 2048, 8192, 32768, 131072, 524288, 1048576]
+      for i, bytes in enumerate(value["NP-BYTES"]):
+        if bytes in annotate_these:
+          print(bytes)
+          if "latency" in graph_options["ARGS"]:
+            ax.annotate(round(value["NP-LATENCY"][i], 2), (bytes, value["NP-LATENCY"][i]))
+          elif "throughput" in graph_options["ARGS"]:
+            ax.annotate(round(value["NP-THROUGHPUT"][i], 2), (bytes, value["NP-THROUGHPUT"][i]))
     # No scientific notation
     ax.ticklabel_format(useOffset=False, style='plain')
     index += 1
@@ -597,8 +862,8 @@ def plot_ib_perftest(ax, ax2, stats_dict, graph_options):
       if "PERCENTILES" in graph_options and "99.9" in graph_options["PERCENTILES"]:
         ax.plot(value["IB-BYTES"], value["99.9%"], label="99.9%"+lbl)
     elif "throughput" in graph_options["ARGS"]:
-      ax.plot(value["IB-BYTES"], value["BW-PEAK"], label="Peak"+lbl) #MB/s
-      ax.plot(value["IB-BYTES"], value["BW-AVG"], label="Avg"+lbl) #MB/s
+      ax.plot(value["IB-BYTES"], value["BW-PEAK"], label="Peak"+lbl) # Mb/s or Gb/s
+      ax.plot(value["IB-BYTES"], value["BW-AVG"], label="Avg"+lbl) # Mb/s or Gb/s
       ax2.plot(value["IB-BYTES"], value["BW-MPPS"], linestyle="dashed", label="Msg-rate"+lbl) #Mega packets per s
 
     annotate_these = [2, 4, 32, 64, 256, 2048, 8192, 32768, 131072, 524288, 1048576]
@@ -671,6 +936,8 @@ def main():
     for ci, graph in enumerate(row):
       ax2 = None # For second y axis
       graphs = 0 # How many graphs drawn
+      if "COMPARE" in graph:
+        graphs += len(graph["COMPARE"])
 
       if "cpu" in graph["ARGS"] or "cpu-mean" in graph["ARGS"]: # DO NOT use with throughput ! it already creates ax2 twinx
         if len(graph["ARGS"]) > 2:# 2 as if more than ARGS cpu and cpu-mean # graphs > 0: # This already means that there are per-run graphs and we need mean CPU usage!
@@ -701,6 +968,8 @@ def main():
 
       # Shared functions for different benchmarks
       elif len(list(set(["wrk", "sockperf"]) & set(graph["ARGS"]))) > 0:
+        # TODO remove, these combined in one
+        '''
         if "max" in graph["ARGS"]: #args.max:
           graphs += 1
           plot_max_latencies(axes[ri][ci], graph["STATS"], graph)
@@ -710,14 +979,18 @@ def main():
         if "mean" in graph["ARGS"]: #args.mean:
           graphs += 1
           plot_mean_latencies(axes[ri][ci], graph["STATS"], graph)
+        '''
+        if len(list(set(["max", "min", "mean"]) & set(graph["ARGS"]))) > 0:
+          graphs += 2
+          plot_latencies_maxminmean(axes[ri][ci], graph["STATS"], graph)
         if "percentiles" in graph["ARGS"]:#len(args.percentiles):
           graphs += len(graph["PERCENTILES"]) #len(args.percentiles)
           #graph_options["PERCENTILES"] = args.percentiles #set in the file
           plot_percentiles(axes[ri][ci], graph["STATS"], graph)
-        if "wrk" in graph["ARGS"] and "throughput" in graph["ARGS"]:
+        if "throughput" in graph["ARGS"]:
           graphs += 2
           ax2 = axes[ri][ci].twinx()
-          plot_wrk_throughput(axes[ri][ci], ax2, graph["STATS"], graph)
+          plot_throughput(axes[ri][ci], ax2, graph["STATS"], graph)
 
       # Graph legends
       if graphs > 1:
@@ -727,26 +1000,29 @@ def main():
         if len(row) > 1:
           modifier = 0.05
         box = axes[ri][ci].get_position()
-        axes[ri][ci].set_position([box.x0, box.y0, box.width * (0.90+modifier), box.height])
+        if not "floatlegend" in graph["ARGS"]:
+          axes[ri][ci].set_position([box.x0, box.y0, box.width * (0.90+modifier), box.height])
         legend_title = ""
         if "cpu-mean" in graph["ARGS"]:
           legend_title = "CPU:\nclient&server"
-        # Legend always has a set position, should we make this optional? For certain plots, and not for others maybe
-        # If nönnöö in graph args, else this
-        axes[ri][ci].legend(bbox_to_anchor=(1.035,1), title=legend_title)
+        # Legend has a set position, option to float with "floatlegend"
+        if "floatlegend" in graph["ARGS"]:
+          axes[ri][ci].legend(title=legend_title)
+        else:
+          axes[ri][ci].legend(bbox_to_anchor=(1.035,1), title=legend_title)
         if ax2 is not None and "cpu" in graph["ARGS"]:
           if all(x in ["user", "kernel", "sw-int"] for x in graph["CPU-METRICS"]):
             # Custom legend for CPU
             legend_elements = [Line2D([0], [0], color='m', lw=4, alpha=0.5, label='User'),
                               Line2D([0], [0], color='y', lw=4, alpha=0.5, label='Kernel'),
                               Line2D([0], [0], color='c', lw=4, alpha=0.5, label='SW-int')]
-            ax2.legend(title="CPU:\nclient&server", handles=legend_elements, bbox_to_anchor=(1.035,0.4))
+            ax2.legend(title="CPU:\nclient&server", handles=legend_elements, bbox_to_anchor=(1.035,0.3))
           else:
             ax2.legend(title="CPU:\nclient&server")
           #handles, labels = ax2.get_legend_handles_labels()
           #ax2.legend(list(set(handles)), list(set(labels)), title="CPU usage,\nclient&server")
         elif ax2 is not None:
-          ax2.legend(bbox_to_anchor=(1.035,0.4), loc="center left")
+          ax2.legend(bbox_to_anchor=(1.035,0.3), loc="center left")
       if "XAXIS" in graph and "XAXIS-N" in graph:
         print("XAXIS in", ri, ci)
         print(graph["XAXIS"])
@@ -762,11 +1038,11 @@ def main():
         print("Not enough axes defined with AXES! Use AXES x,y,y2")
         return 1
       # Logaritmic y axis in most cases
-      if not "cpu-mean" in graph["ARGS"]:# and not "netpipe" in graph["ARGS"]:
+      if not "nology" in graph["ARGS"] and not "cpu-mean" in graph["ARGS"]:# and not "netpipe" in graph["ARGS"]:
         axes[ri][ci].set_yscale("log", nonpositive="clip") # Nonpositive to help larger stdev than mean to show, maybe not needed
       # Logarithmic x axis for the tests that have data points per byte sizes
-      if len(list(set(["ib", "netpipe"]) & set(graph["ARGS"]))) > 0:
-        print("Netpipe and IB perftest uses log xaxis, good?")
+      if not "nologx" in graph["ARGS"] and len(list(set(["ib", "netpipe"]) & set(graph["ARGS"]))) > 0:
+        print("Netpipe and IB perftest uses log xaxis, Disable with 'nologx' arg")
         axes[ri][ci].set_xscale("log", nonpositive="clip")
       if "AXTITLE" in graph:
         axes[ri][ci].set_title(graph["AXTITLE"])
@@ -780,7 +1056,6 @@ def main():
   #plt.show()
   plt.savefig(graph_options["FILENAME"])
   #print("Saved", graph_options["FILENAME"])
-  print("Latencies are now in MILLISECONDS!")
 
 if (__name__ == '__main__'):
   main()
