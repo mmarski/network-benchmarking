@@ -61,7 +61,7 @@ title <title> - Set a title for the specific plot
 cpu <optional space separated params> - for CPU data parsing (from top tool), plot timeline of CPU usages
 cpu-mean <optional space separated params> - for CPU data parsing (from top tool), plot mean CPU usages
 CPU parameters are space separated, for example: "cpu-mean user kernel sw-int" plots the corresponding CPU information.
-percentile <space separated percentile list> - for example "percentile 50 90 99 99.999" gives the corresponding percentile graphs. Don't use %, it is added in script.
+percentile <space separated percentile list> - for example "percentile 50 90 99 99.999" gives the corresponding latency percentile graphs. Don't use %, it is added in script.
 ```
 
 ### Required file lists
@@ -75,7 +75,9 @@ Give a list of files to read on the next rows
 ARGS <space separated single word arguments>
 ```
 
-Examples: sockperf - Parse sockperf information, nology - no logaritmic y axis, floatlegend - legend inside graph instead of on the side, us - microsecond usage, gbps - gigabytes per second usage
+Examples: sockperf - Parse sockperf information, nology - no logaritmic y axis, floatlegend - legend inside graph instead of on the side, us - microsecond usage, gbps - gigabytes per second usage, min - minimum latency graph display
+
+Use argument "latency" or "throughput" to determine which is to be parsed and drawn
 
 ### Comma separated options
 ```
