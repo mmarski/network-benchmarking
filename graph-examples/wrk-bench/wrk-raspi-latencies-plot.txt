@@ -1,0 +1,144 @@
+TITLE wrk-Nginx latencies on Raspberry Pi setup
+TITLE2 180 seconds, 1 connection, 1 thread
+
+FILENAME wrk-raspi-latencies
+COLUMNS 2
+FILEDIR raspi-actual/testdata
+
+ARG percentiles 50 90 99 99.999
+ARGS min max mean wrk
+ARG title Bare metal
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+wrk-filesizes-1-1c-1t-180s-1B-baremetal
+wrk-filesizes-2-1c-1t-180s-64B-baremetal
+wrk-filesizes-3-1c-1t-180s-512B-baremetal
+wrk-filesizes-4-1c-1t-180s-1kB-baremetal
+wrk-filesizes-5-1c-1t-180s-1472B-baremetal
+wrk-filesizes-6-1c-1t-180s-2kB-baremetal
+wrk-filesizes-7-1c-1t-180s-4kB-baremetal
+wrk-filesizes-8-1c-1t-180s-32kB-baremetal
+wrk-filesizes-9-1c-1t-180s-64kB-baremetal
+wrk-filesizes-10-1c-1t-180s-128kB-baremetal
+wrk-filesizes-11-1c-1t-180s-256kB-baremetal
+wrk-filesizes-12-1c-1t-180s-512kB-baremetal
+wrk-filesizes-13-1c-1t-180s-1M-baremetal
+
+
+SUBPLOT
+
+ARG percentiles 50 90 99 99.999
+ARGS min max mean wrk
+ARG title Bare metal run 2
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+wrk-filesizes2-1-1c-1t-180s-1B-baremetal
+wrk-filesizes2-2-1c-1t-180s-64B-baremetal
+wrk-filesizes2-3-1c-1t-180s-512B-baremetal
+wrk-filesizes2-4-1c-1t-180s-1kB-baremetal
+wrk-filesizes2-5-1c-1t-180s-1472B-baremetal
+wrk-filesizes2-6-1c-1t-180s-2kB-baremetal
+wrk-filesizes2-7-1c-1t-180s-4kB-baremetal
+wrk-filesizes2-8-1c-1t-180s-32kB-baremetal
+wrk-filesizes2-9-1c-1t-180s-64kB-baremetal
+wrk-filesizes2-10-1c-1t-180s-128kB-baremetal
+wrk-filesizes2-11-1c-1t-180s-256kB-baremetal
+wrk-filesizes2-12-1c-1t-180s-512kB-baremetal
+wrk-filesizes2-13-1c-1t-180s-1M-baremetal
+
+SUBPLOT
+
+ARasdgdsasdgG percentiles 50 90 99 99.999
+ARGS min max mean wrk
+ARG title Bare metal run 30s
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+wrk-filesizes-1-1c-1t-30s-1B-baremetal
+wrk-filesizes-2-1c-1t-30s-64B-baremetal
+wrk-filesizes-3-1c-1t-30s-512B-baremetal
+wrk-filesizes-4-1c-1t-30s-1kB-baremetal
+wrk-filesizes-5-1c-1t-30s-1472B-baremetal
+wrk-filesizes-6-1c-1t-30s-2kB-baremetal
+wrk-filesizes-7-1c-1t-30s-4kB-baremetal
+wrk-filesizes-8-1c-1t-30s-32kB-baremetal
+wrk-filesizes-9-1c-1t-30s-64kB-baremetal
+wrk-filesizes-10-1c-1t-30s-128kB-baremetal
+wrk-filesizes-11-1c-1t-30s-256kB-baremetal
+wrk-filesizes-12-1c-1t-30s-512kB-baremetal
+wrk-filesizes-13-1c-1t-30s-1M-baremetal
+
+SUBPLOT
+
+ARG percentiles 50 90 99 99.999
+ARGS min max mean wrk
+ARG title Kubernetes Flannel
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+wrk-filesizes-hostgw-1-1c-1t-180s-1B-kube
+wrk-filesizes-hostgw-2-1c-1t-180s-64B-kube
+wrk-filesizes-hostgw-3-1c-1t-180s-512B-kube
+wrk-filesizes-hostgw-4-1c-1t-180s-1kB-kube
+wrk-filesizes-hostgw-5-1c-1t-180s-1472B-kube
+wrk-filesizes-hostgw-6-1c-1t-180s-2kB-kube
+wrk-filesizes-hostgw-7-1c-1t-180s-4kB-kube
+wrk-filesizes-hostgw-8-1c-1t-180s-32kB-kube
+wrk-filesizes-hostgw-9-1c-1t-180s-64kB-kube
+wrk-filesizes-hostgw-10-1c-1t-180s-128kB-kube
+wrk-filesizes-hostgw-11-1c-1t-180s-256kB-kube
+wrk-filesizes-hostgw-12-1c-1t-180s-512kB-kube
+wrk-filesizes-hostgw-13-1c-1t-180s-1M-kube
+
+SUBPLOT
+
+ARG percentiles 50 90 99 99.999
+ARGS min max mean wrk
+ARG title Bare metal, 10 ms delay
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+wrk-filesizes-delay10-1-1c-1t-60s-1B-baremetal
+wrk-filesizes-delay10-2-1c-1t-60s-64B-baremetal
+wrk-filesizes-delay10-3-1c-1t-60s-512B-baremetal
+wrk-filesizes-delay10-4-1c-1t-60s-1kB-baremetal
+wrk-filesizes-delay10-5-1c-1t-60s-1472B-baremetal
+wrk-filesizes-delay10-6-1c-1t-60s-2kB-baremetal
+wrk-filesizes-delay10-7-1c-1t-60s-4kB-baremetal
+wrk-filesizes-delay10-8-1c-1t-60s-32kB-baremetal
+wrk-filesizes-delay10-9-1c-1t-60s-64kB-baremetal
+wrk-filesizes-delay10-10-1c-1t-60s-128kB-baremetal
+wrk-filesizes-delay10-11-1c-1t-60s-256kB-baremetal
+wrk-filesizes-delay10-12-1c-1t-60s-512kB-baremetal
+wrk-filesizes-delay10-13-1c-1t-60s-1M-baremetal
+
+SUBPLOT
+
+
+ARG percentiles 50 90 99 99.999
+ARGS min max mean wrk
+ARG title Kubernetes Flannel, 10ms delay
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+wrk-filesizes-hostgw-delay10-1-1c-1t-60s-1B-kube
+wrk-filesizes-hostgw-delay10-2-1c-1t-60s-64B-kube
+wrk-filesizes-hostgw-delay10-3-1c-1t-60s-512B-kube
+wrk-filesizes-hostgw-delay10-4-1c-1t-60s-1kB-kube
+wrk-filesizes-hostgw-delay10-5-1c-1t-60s-1472B-kube
+wrk-filesizes-hostgw-delay10-6-1c-1t-60s-2kB-kube
+wrk-filesizes-hostgw-delay10-7-1c-1t-60s-4kB-kube
+wrk-filesizes-hostgw-delay10-8-1c-1t-60s-32kB-kube
+wrk-filesizes-hostgw-delay10-9-1c-1t-60s-64kB-kube
+wrk-filesizes-hostgw-delay10-10-1c-1t-60s-128kB-kube
+wrk-filesizes-hostgw-delay10-11-1c-1t-60s-256kB-kube
+wrk-filesizes-hostgw-delay10-12-1c-1t-60s-512kB-kube
+wrk-filesizes-hostgw-delay10-13-1c-1t-60s-1M-kube

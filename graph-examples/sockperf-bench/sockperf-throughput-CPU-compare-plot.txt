@@ -1,0 +1,160 @@
+TITLE Sockperf: CPU usage comparison
+
+FILENAME sockperf-CPU-compare
+FILEDIR latencydata
+COLUMNS 2
+
+ARG cpu-mean user kernel sw-int
+ARG title Baremetal
+AXES bytes,%
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+CPUFILES
+sockperf-datasizes-ping-pong-1-180s-14B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-1-180s-14B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-2-180s-32B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-2-180s-32B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-3-180s-64B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-3-180s-64B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-4-180s-256B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-4-180s-256B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-5-180s-512B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-5-180s-512B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-6-180s-1kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-6-180s-1kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-7-180s-2kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-7-180s-2kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-8-180s-4kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-8-180s-4kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-9-180s-8kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-9-180s-8kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-10-180s-32kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-10-180s-32kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-11-180s-64kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-11-180s-64kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-12-180s-128kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-12-180s-128kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-13-180s-256kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-13-180s-256kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-14-180s-512kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-14-180s-512kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-15-180s-1M-baremetal-CPU-client
+sockperf-datasizes-ping-pong-15-180s-1M-baremetal-CPU-server
+
+SUBPLOT
+ARG cpu-mean user kernel sw-int
+ARG title VMA Baremetal
+AXES bytes,%
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+CPUFILES
+sockperf-datasizes-VMA-ping-pong-1-180s-14B-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-1-180s-14B-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-2-180s-32B-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-2-180s-32B-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-3-180s-64B-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-3-180s-64B-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-4-180s-256B-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-4-180s-256B-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-5-180s-512B-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-5-180s-512B-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-6-180s-1kB-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-6-180s-1kB-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-7-180s-2kB-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-7-180s-2kB-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-8-180s-4kB-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-8-180s-4kB-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-9-180s-8kB-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-9-180s-8kB-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-10-180s-32kB-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-10-180s-32kB-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-11-180s-64kB-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-11-180s-64kB-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-12-180s-128kB-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-12-180s-128kB-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-13-180s-256kB-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-13-180s-256kB-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-14-180s-512kB-baremetal-CPU-server
+sockperf-datasizes-VMA-ping-pong-14-180s-512kB-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-15-180s-1M-baremetal-CPU-client
+sockperf-datasizes-VMA-ping-pong-15-180s-1M-baremetal-CPU-server
+
+SUBPLOT
+ARG cpu-mean user kernel sw-int
+ARG title Kubernetes
+AXES bytes,%
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+CPUFILES
+sockperf-datasizes-ping-pong-1-180s-14B-kube-CPU-client
+sockperf-datasizes-ping-pong-1-180s-14B-kube-CPU-server
+sockperf-datasizes-ping-pong-2-180s-32B-kube-CPU-client
+sockperf-datasizes-ping-pong-2-180s-32B-kube-CPU-server
+sockperf-datasizes-ping-pong-3-180s-64B-kube-CPU-server
+sockperf-datasizes-ping-pong-3-180s-64B-kube-CPU-client
+sockperf-datasizes-ping-pong-4-180s-256B-kube-CPU-server
+sockperf-datasizes-ping-pong-4-180s-256B-kube-CPU-client
+sockperf-datasizes-ping-pong-5-180s-512B-kube-CPU-client
+sockperf-datasizes-ping-pong-5-180s-512B-kube-CPU-server
+sockperf-datasizes-ping-pong-6-180s-1kB-kube-CPU-client
+sockperf-datasizes-ping-pong-6-180s-1kB-kube-CPU-server
+sockperf-datasizes-ping-pong-7-180s-2kB-kube-CPU-client
+sockperf-datasizes-ping-pong-7-180s-2kB-kube-CPU-server
+sockperf-datasizes-ping-pong-8-180s-4kB-kube-CPU-client
+sockperf-datasizes-ping-pong-8-180s-4kB-kube-CPU-server
+sockperf-datasizes-ping-pong-9-180s-8kB-kube-CPU-client
+sockperf-datasizes-ping-pong-9-180s-8kB-kube-CPU-server
+sockperf-datasizes-ping-pong-10-180s-32kB-kube-CPU-client
+sockperf-datasizes-ping-pong-10-180s-32kB-kube-CPU-server
+sockperf-datasizes-ping-pong-11-180s-64kB-kube-CPU-client
+sockperf-datasizes-ping-pong-11-180s-64kB-kube-CPU-server
+sockperf-datasizes-ping-pong-12-180s-128kB-kube-CPU-server
+sockperf-datasizes-ping-pong-12-180s-128kB-kube-CPU-client
+sockperf-datasizes-ping-pong-13-180s-256kB-kube-CPU-client
+sockperf-datasizes-ping-pong-13-180s-256kB-kube-CPU-server
+sockperf-datasizes-ping-pong-14-180s-512kB-kube-CPU-server
+sockperf-datasizes-ping-pong-14-180s-512kB-kube-CPU-client
+sockperf-datasizes-ping-pong-15-180s-1M-kube-CPU-client
+sockperf-datasizes-ping-pong-15-180s-1M-kube-CPU-server
+
+
+SUBPLOT
+
+ARG cpu-mean user kernel sw-int
+ARG title Freeflow Kubernetes
+AXES bytes,%
+XAXIS 14,32,64,256,512,1k,1472,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+CPUFILES
+sockperf-datasizes-freeflow-ping-pong-1-180s-14B-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-1-180s-14B-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-2-180s-32B-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-2-180s-32B-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-3-180s-64B-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-3-180s-64B-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-4-180s-256B-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-4-180s-256B-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-5-180s-512B-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-5-180s-512B-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-6-180s-1kB-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-6-180s-1kB-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-7-180s-1472B-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-7-180s-1472B-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-8-180s-2kB-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-8-180s-2kB-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-9-180s-4kB-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-9-180s-4kB-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-10-180s-8kB-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-10-180s-8kB-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-11-180s-32kB-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-11-180s-32kB-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-12-180s-64kB-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-12-180s-64kB-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-13-180s-128kB-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-13-180s-128kB-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-14-180s-256kB-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-14-180s-256kB-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-15-180s-512kB-kube-CPU-server
+sockperf-datasizes-freeflow-ping-pong-15-180s-512kB-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-16-180s-1M-kube-CPU-client
+sockperf-datasizes-freeflow-ping-pong-16-180s-1M-kube-CPU-server

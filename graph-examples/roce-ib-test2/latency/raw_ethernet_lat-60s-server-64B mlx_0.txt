@@ -1,0 +1,57 @@
+raw_ethernet_lat -d mlx5_0 -F --server -B b8:59:9f:e9:ac:ce -E 0c:42:a1:4e:ca:e2 --tcp -j 10.37.215.9 -J 10.37.215.10 -k 2000 -K 2000 -D 60 --cpu_util
+ Min msg size for RawEth is 64B - changing msg size to 64
+---------------------------------------------------------------------------------------
+                    Send Latency Test
+ Dual-port       : OFF          Device         : mlx5_0
+ Number of qps   : 1            Transport type : IB
+ Connection type : RawEth               Using SRQ      : OFF
+ PCIe relax order: ON
+ ibv_wr* API     : OFF
+ TX depth        : 1
+ RX depth        : 512
+ Mtu             : 1518[B]
+ Link type       : Ethernet
+ GID index       : 0
+ Max inline data : 236[B]
+ rdma_cm QPs     : OFF
+ Data ex. method : Ethernet
+---------------------------------------------------------------------------------------
+MAC attached  : B8:59:9F:E9:AC:CE
+spec_info - dst_ip   : 10.37.215.10
+spec_info - src_ip   : 10.37.215.9
+spec_info - dst_port : 2000
+spec_info - src_port : 2000
+**raw ethernet header****************************************
+
+--------------------------------------------------------------
+| Dest MAC         | Src MAC          | Packet Type          |
+|------------------------------------------------------------|
+| 0C:42:A1:4E:CA:E2| B8:59:9F:E9:AC:CE|IPv4                  |
+|------------------------------------------------------------|
+
+**IP header**************
+|-----------------------|
+|Version   |4           |
+|Ihl       |5           |
+|TOS       |0           |
+|TOT LEN   |46          |
+|ID        |0           |
+|Frag      |0           |
+|TTL       |64          |
+|protocol  |TCP         |
+|Check sum |B86C        |
+|Source IP |10.37.215.10|
+|Dest IP   |10.37.215.9 |
+|-----------------------|
+
+**TCP header***********
+|---------------------|
+|Src  Port |2000      |
+|Dest Port |2000      |
+|offset    |5         |
+|window    |8192      |
+|---------------------|
+---------------------------------------------------------------------------------------
+ #bytes        #iterations       t_avg[usec]    tps average    CPU_Util[%]
+ 64            9226916            1.63           307565.22          2.88
+---------------------------------------------------------------------------------------

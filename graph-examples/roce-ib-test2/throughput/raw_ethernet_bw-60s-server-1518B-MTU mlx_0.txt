@@ -1,0 +1,28 @@
+raw_ethernet_bw -d mlx5_0 -F --server -B b8:59:9f:e9:ac:ce -E 0c:42:a1:4e:ca:e2 --tcp -j 10.37.215.9 -J 10.37.215.10 -k 2000 -K 2000 -D 60 --cpu_util
+ Max msg size in RawEth is MTU 1518
+ Changing msg size to this MTU
+---------------------------------------------------------------------------------------
+                    Send BW Test
+ Dual-port       : OFF          Device         : mlx5_0
+ Number of qps   : 1            Transport type : IB
+ Connection type : RawEth               Using SRQ      : OFF
+ PCIe relax order: ON
+ ibv_wr* API     : OFF
+ RX depth        : 512
+ CQ Moderation   : 1
+ Mtu             : 1518[B]
+ Link type       : Ethernet
+ GID index       : 0
+ Max inline data : 0[B]
+ rdma_cm QPs     : OFF
+ Data ex. method : Ethernet
+---------------------------------------------------------------------------------------
+MAC attached  : B8:59:9F:E9:AC:CE
+spec_info - dst_ip   : 10.37.215.10
+spec_info - src_ip   : 10.37.215.9
+spec_info - dst_port : 2000
+spec_info - src_port : 2000
+---------------------------------------------------------------------------------------
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]    CPU_Util[%]
+ 1518       60937212         0.00               2940.43            2.031138         2.94
+---------------------------------------------------------------------------------------

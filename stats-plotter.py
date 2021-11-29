@@ -158,9 +158,7 @@ def parse_files(graph_options, stats_dict):
   # Can specify another directory relative to current one for stat files
   if graph_options["FILEDIR"] is not None:
     filedir = graph_options["FILEDIR"] + "/"
-  # done: go through every subplot row element in for loop and column element in a nested for
-  # It shouldn't be too bad. After this, similar nested for, for the graphing system at the end!
-  # done stats_dict myös nested muotoon??? - Tallennetaan graph optionsiin..
+
   for row in graph_options["SUBPLOTS"]:
     for graphopt in row:
       # Each graph gets its own ordered dict
@@ -171,6 +169,7 @@ def parse_files(graph_options, stats_dict):
       for f in graphopt["STATFILES"]:#list(files):
         with open("./" + filedir + f, "r") as statfile:
           # Now parse the files based on the keyword in their file name
+          # Stat dictionary key is the file name
           if "iperf" in f: # graphopt["ARGS"]:
             # Put everything in iperf JSON to dict
             graphopt["STATS"][f] = json.load(statfile)
@@ -187,19 +186,9 @@ def parse_files(graph_options, stats_dict):
                 print("Using bytes transferred from IB test as XAXIS, assuming same values for all")
                 graphopt["XAXIS"] = graphopt["STATS"][f]["IB-BYTES"]
             else: # Default: wrk benchmark data
-              #name = ""
-              #if stat_type == "wrk":
-              #  # Get second row: eg. "1 threads and 10 connections", as graph name
-              #  name = lines[1].lstrip().rstrip()
-              #else:
-              # Use file name
               graphopt["STATS"][f] = parse_wrk_data(lines)
-      # done: jos ei ole CPU filuja määritelty, mutta ARG cpu on, hae cpu filet wrkfilejen perusteella! done
-      # Eli luo filesistä uusi lista, jossa haetaan joka filulla pääte -CPU-client ja -CPU-server
-      # Pidä huoli järjestyksestä koska siinä orderissa data esitetään.. Tai tarkista file name (stats_dict key) kumpi se on kun graafataan
-      # Ehkä jopa voisi laittaa CPU filet itse wrk filun stats_dict entryn alle jotta ainakin olis koherentti
-      # Tai sit vaan ettii stats_dict saman niminen filu ja vielä client tai serveri, ehkä se helpompi tapa
-      # Find CPU stat files based on the actual statfiles if not given
+
+      # Find CPU stat files based on the actual statfiles if not given (if no CPUFILES given but ARG cpu is)
       # The CPU file name has to be same as the stat file with "-CPU" (and "-client" for example)
       if len(graphopt["CPUFILES"]) == 0 and "cpu" in graphopt["ARGS"]:
         print("Finding matching CPU stat files")
@@ -217,11 +206,6 @@ def parse_files(graph_options, stats_dict):
 
   return 0
 
-#def parse_json_files(files, stats_dict):
-#  # Put everything to dict
-#  for f in files:
-#    with open("./" + f, "r") as statfile:
-#      stats_dict[f] = json.load(statfile)
 
 # Read the mandatory options file
 def parse_graph_options(file):
@@ -229,30 +213,23 @@ def parse_graph_options(file):
   return_dict = {}
   return_dict["TITLE"] = ""
   # Different subplots are stored in this array of arrays, the inside arrays containing columns and outer the rows
-  # Eli: Sisempään lisättäessä dictejä, mennään vasemmalta oikealle. Ulos lisättäessä mennään alas.
-  # TODO: argument COLUMNS to determine the width of SUBPLOTS: done
+  # Argument COLUMNS to determine the width of SUBPLOTS:
   # The graph options are then parsed in the order left to right, top to bottom subplots, basic reading system
   # Keyword SUBPLOT separates the plots. When this keyword comes, we move to the next column, appending to the inner array.
   # unless if we are at last column,
   # in which case we move to the next row. Creating (appending) another array in outer SUBPLOTS array.
-  # With this we won't need another for loop breaking things in the readline loop.
-  # TODO: the file parser has to support this. It has to go through SUBPLOTS and parse the files associated with each, saving to each.
-  # The graphing system has to be in a for loop that also goes through these subplots. Should be ez as we know the size of subplots.
-  # We won't need a change in plotter functions, so that they plot to ax[x][y], bc the specific ax is forwarded from the graphing system
   return_dict["SUBPLOTS"] = [[{}]]
   # each of the SUBPLOTS array elements contain a dictionary for a graph!
-  columns = 1 # This is changed only once when the keyword COLUMNS comes. and checked only when
-  # the keyword: SUBPLOT comes.
+  columns = 1 # This is changed only once when the keyword COLUMNS comes. and checked only when the keyword: SUBPLOT comes.
   cur_col = 0 # This is changed back to 1 when we have parsed ==columns when keyword SUBPLOT comes.
   cur_row = 0 # We need this for indexing
-  # ((I think it is not needed)v, as we can always just append more rows. Which is done if we exceed final column.
-  # (we stil need to use the indexes soo.. it is needed)
 
   return_dict["SUBPLOTS"][0][0]["STATFILES"] = []
   return_dict["SUBPLOTS"][0][0]["CPUFILES"] = []
   return_dict["SUBPLOTS"][0][0]["ARGS"] = []
-  # should we make a filedir for each graph? global for now
+  # Global FILEDIR option - the SUBPLOTS can also contain FILEDIR options, to change the directory for a plot's files. The newest FILEDIR is used for all files until another FILEDIR
   return_dict["FILEDIR"] = None # If stat files in different directory
+  return_dict["SHAREY"] = False # If we want same scale y axis on all graphs
 
   read_filenames = False
   read_cpu_filenames = False
@@ -269,6 +246,9 @@ def parse_graph_options(file):
         elif split[0].startswith("CPUFILES"):
           read_cpu_filenames = True
           continue
+        # Share same y axis scale
+        elif split[0].startswith("SHAREY"):
+          return_dict["SHAREY"] = True
         # Program arguments in file, that specify additional information
         elif split[0] == "ARG":
           # Percentiles to get, possibilities 50, 90, 99, 99.999
@@ -332,7 +312,7 @@ def parse_graph_options(file):
             read_cpu_filenames = True
             read_filenames = False
             continue
-          return_dict["SUBPLOTS"][cur_row][cur_col]["STATFILES"].append(line.rstrip()) # TODO appendaako tämä myös tyhjät rivit jos semmoisia tulee optionsin perään? Ja rikkoo asioita. Jos, niin tsekki alkuun ja continue
+          return_dict["SUBPLOTS"][cur_row][cur_col]["STATFILES"].append(line.rstrip())
         elif read_cpu_filenames:
           if line.rstrip() == "": # Skip empty line
             continue
@@ -342,7 +322,6 @@ def parse_graph_options(file):
             continue
           return_dict["SUBPLOTS"][cur_row][cur_col]["CPUFILES"].append(line.rstrip())
 
-  # TODO except keyerror: tarvittavien checki tähän?
   # Give XAXIS-N (numeric indexes for xaxis elements) to final subplot
   if "XAXIS" in return_dict["SUBPLOTS"][cur_row][cur_col]:
     return_dict["SUBPLOTS"][cur_row][cur_col]["XAXIS-N"] = np.arange(len(return_dict["SUBPLOTS"][cur_row][cur_col]["XAXIS"])) # Used to move the possible CPU bars slightly
@@ -353,88 +332,6 @@ def parse_graph_options(file):
 # - Plotting functions
 #####################################
 
-# TODO microseconds: if "us" not in graph options, divider = 1000 else divider = 1, jaa divideril
-
-# TODO hmm, moni näistä voisi lisätä yhteen funktioon joka käy läpi kaikki asetukset max,min,mean jne
-# Nää kaikki suorittaa saman operaation..
-
-# TODO remove, combined in one function below
-'''
-def plot_max_latencies(ax, stats_dict, graph_options):
-  max_arr = []
-  for key, value in stats_dict.items():
-    if "CPU" in key: # Don't go through CPU stat files
-        continue
-    max_val = value["MAX"]
-    # Convert to milliseconds
-    if "us" not in graph_options["ARGS"]:
-      max_val /= 1000
-    max_arr.append(max_val)
-  
-  ax.plot(graph_options["XAXIS"], max_arr, label="Max")
-  # Annotate if no 99.999th percentile graph
-  if not "percentiles" in graph_options["ARGS"] or not "99.999" in graph_options["PERCENTILES"]:
-    for i, value in enumerate(max_arr):
-      ax.annotate(round(value, 2), (graph_options["XAXIS"][i], max_arr[i]))
-
-# TODO compare
-def plot_min_latencies(ax, stats_dict, graph_options):
-  min_arr = []
-  for key, value in stats_dict.items():
-    if "CPU" in key: # Don't go through CPU stat files
-        continue
-    min_val = value["MIN"]
-    # Convert to milliseconds
-    if "us" not in graph_options["ARGS"]:
-      min_val /= 1000
-    min_arr.append(min_val)
-  
-  ax.plot(graph_options["XAXIS"], min_arr, label="Min")
-
-  for i, value in enumerate(min_arr):
-    ax.annotate(round(value, 2), (graph_options["XAXIS"][i], min_arr[i]))
-
-def plot_mean_latencies(ax, stats_dict, graph_options):
-  labels_arr = [""]
-  idx = 0
-  # Mean with standard deviation
-  mean_arr = [[]]
-  stdev_arr = [[]]
-  if "COMPARE" in graph_options:
-    labels_arr[0] = graph_options["COMPARE"][0]
-    for i in range(len(graph_options["COMPARE"])-1):
-      mean_arr.append([])
-      stdev_arr.append([])
-      labels_arr.append(graph_options["COMPARE"][i+1])
-  for key, value in stats_dict.items():
-    if "CPU" in key: # Don't go through CPU stat files
-        continue
-    # NEW THING: Compare runs by keywords, determine with e.g. COMPARE wrk-run1,wrk-run2, where wrk-run1 and wrk-run2 can be found in group's file names
-    if "COMPARE" in graph_options:
-      for i, c in enumerate(graph_options["COMPARE"]):
-        if c in key:
-          idx = i
-          break
-    mean = value["MEAN"]
-    stdev = value["STDEV"]
-    # Convert to milliseconds
-    if "us" not in graph_options["ARGS"]:
-      mean /= 1000
-      stdev /= 1000
-    mean_arr[idx].append(mean)
-    stdev_arr[idx].append(stdev)
-  
-  for i, l in enumerate(labels_arr):
-    if "LABELS" in graph_options and len(graph_options["LABELS"]) == len(labels_arr):
-      l = graph_options["LABELS"][i]
-    if len(labels_arr) == 1:
-      ax.errorbar(graph_options["XAXIS"], mean_arr[i], yerr=stdev_arr[i], capsize=6, color="darkslategray", label=l+" Mean")
-    else:
-      ax.plot(graph_options["XAXIS"], mean_arr[i], label=l+" Mean")
-
-    for j, value in enumerate(mean_arr[i]):
-      ax.annotate(round(value, 2), (graph_options["XAXIS"][j], mean_arr[i][j]))
-'''
 
 def plot_latencies_maxminmean(ax, stats_dict, graph_options):
   labels_arr = [""]
@@ -549,7 +446,6 @@ def plot_percentiles(ax, stats_dict, graph_options):
           ax.annotate(round(val, 2), (graph_options["XAXIS"][j], value[j]))
 
 
-# done :) Standardisoitu funktio, joka osaa piirtää sekä wrk, että Sockperf throughputin. Tarvitaan vaan bits per second bandwidth eri runeista.
 def plot_throughput(ax, ax2, stats_dict, graph_options):
   #graph_dict = {}
   #graph_dict["Throughput"] = []
@@ -630,7 +526,6 @@ def plot_cpu_usage(ax, ax2, stats_dict, graph_options):
   colors = {"user": "m", "kernel": "y", "idle": "g", "peripheral": "b", "hw": "r", "hw-int": "r", "sw": "c", "sw-int": "c", "steal": "tab:brown"}
 
   for key, value in stats_dict.items():
-    # TODO tsekkaa lukeeko keyssä "CPU". Tää tsekki muuten tarvii sit jokaselle muullekin plottaajalle jotta se ei käy läpi cpu dataa? Jota ei ole, tai tää wrk dataa
     if not "CPU" in key: # TODO softan ohjeisiin että cpu filuissa pitää sisältyä toi keyword
       continue
     run_key = key.split("CPU")[0]
@@ -780,9 +675,12 @@ def plot_iperf(ax, stats_dict, graph_options):
       if "LABELS" in graph_options and len(graph_options["LABELS"]) == len(labels_arr):
         lbl = graph_options["LABELS"][i]
       if "latency" in graph_options["ARGS"]:
-        ax.plot(graph_options["XAXIS"], min_rtt_arr[i], label=lbl+" Min")
-        ax.plot(graph_options["XAXIS"], max_rtt_arr[i], label=lbl+" Max")
-        ax.plot(graph_options["XAXIS"], mean_rtt_arr[i], label=lbl+" Mean")
+        if "min" in graph_options["ARGS"]:
+          ax.plot(graph_options["XAXIS"], min_rtt_arr[i], label=lbl+" Min")
+        if "max" in graph_options["ARGS"]:
+          ax.plot(graph_options["XAXIS"], max_rtt_arr[i], label=lbl+" Max")
+        if "mean" in graph_options["ARGS"]:
+          ax.plot(graph_options["XAXIS"], mean_rtt_arr[i], label=lbl+" Mean")
         for j, val in enumerate(mean_rtt_arr[i]):
           ax.annotate(round(val, 2), (graph_options["XAXIS"][j], mean_rtt_arr[i][j]))
       else:
@@ -819,26 +717,6 @@ def plot_netpipe(ax, stats_dict, graph_options):
     ax.ticklabel_format(useOffset=False, style='plain')
     index += 1
 
-# TODO turha
-'''
-def plot_sockperf(ax, stats_dict, graph_options):
-  percentile_dict = {}
-  for key, value in stats_dict.items():
-    if "CPU" in key: # Don't go through CPU stat files
-      continue
-    # TODO tän voi yhdistää "plot_percentiles", nimetä se takasin semmoseks, ja kutsua tuolta mainista
-    if "percentiles" in graph_options["ARGS"]:
-      for perc in graph_options["PERCENTILES"]:
-        if perc+"%" not in percentile_dict:
-          percentile_dict[perc + "%"] = []
-        latency_val = value[perc + "%"]
-        # Convert to milliseconds
-        latency_val /= 1000
-        percentile_dict[perc + "%"].append(latency_val)
-  # TODO tämäkin tuolta plot_percentiles vaan, tee mieluusti sillä funktiolla
-  for key, value in percentile_dict.items():
-    ax.plot(graph_options["XAXIS"], value, label=key)
-'''
 
 def plot_ib_perftest(ax, ax2, stats_dict, graph_options):
   index = 0
@@ -877,7 +755,7 @@ def plot_ib_perftest(ax, ax2, stats_dict, graph_options):
           ax.annotate(round(value["BW-AVG"][i], 2), (bytes, value["BW-AVG"][i]))
     index += 1
   # No scientific notation
-  ax.ticklabel_format(useOffset=False, style='plain')
+  #ax.ticklabel_format(useOffset=False, style='plain')
 
 #####################################
 # - Main
@@ -887,49 +765,27 @@ def main():
   # Program arguments
   parser = argparse.ArgumentParser(description='Plot graphs from files')
   parser.add_argument('-f', type=str, dest="file", default="", required=True,
-                      help="Graph options file to use. All settings for title, axes, stat files etc. should be given in this file according to readme, which is TODO!")
-  parser.add_argument('--us', dest="use_microseconds", action="store_const", const=True, default=False,
-                      help="NOT IMPLEMENTED Show latencies in microseconds instead of milliseconds TODO into args in graph options")
-  parser.add_argument('--max-latency', dest="max", action="store_const", const=True, default=False,
-                      help="OBSOLETE Comparison of maximum latencies")
-  parser.add_argument('--min-latency', dest="min", action="store_const", const=True, default=False,
-                      help="OBSOLETE Comparison of minimum latencies")
-  parser.add_argument('--mean-latency', dest="mean", action="store_const", const=True, default=False,
-                      help="OBSOLETE Comparison of mean latencies")
-  parser.add_argument('--percentile', type=str, dest="percentiles", default=[], nargs="*",
-                      help="OBSOLETE Give the percentile values to compare")
-  parser.add_argument('--cpu', dest="cpu", action="store_const", const=True, default=False,
-                      help="OBSOLETE Read CPU usage statistics files")
-  parser.add_argument('--iperf', dest="iperf", action="store_const", const=True, default=False,
-                      help="OBSOLETE Read iperf3 statistics files")
+                      help="Graph options file to use. All settings for title, axes, stat files etc. should be given in this file according to readme")
+
   args = parser.parse_args()
   print(args)
-  #files = args.files
-  #stat_type = "wrk"
-  #if args.cpu:
-  #  stat_type = "cpu"
+
 
   # Stats per file
   stats_dict = OrderedDict() # TODO this stats_dict no longer used
   graph_options = parse_graph_options(args.file)
 
   print("Graph options only:", graph_options)
-  # TODO determine if iperf works
-  #if "iperf" in graph_options["SUBPLOTS"][0][0]["ARGS"]: #args.iperf:
-  #  parse_json_files(graph_options["STATFILES"], stats_dict)
-  #else:
+
   parse_files(graph_options, stats_dict)
 
-  #print(stats_dict.keys())
-  #for key, value in stats_dict.items():
-  #  print(key, value)
-
   # Plotting
-  # TODO figsize change for multiple subplots? Kato miltä ne näyttää eka
+  # figsize change for multiple subplots
   plt.rcParams["figure.figsize"] = (10 * len(graph_options["SUBPLOTS"][0]), 6 * len(graph_options["SUBPLOTS"])) # 9, 6
-  print("DEBUGINFO", len(graph_options["SUBPLOTS"]), len(graph_options["SUBPLOTS"][0]))
+  print("Subplot dimensions", len(graph_options["SUBPLOTS"]), len(graph_options["SUBPLOTS"][0]))
+  # sharey: if we want to share the same y axis scale
   # Squeeze=False: always give us a 2D array for use here, even if only one graph
-  fig, axes = plt.subplots(len(graph_options["SUBPLOTS"]), len(graph_options["SUBPLOTS"][0]), squeeze=False)#1,1)
+  fig, axes = plt.subplots(len(graph_options["SUBPLOTS"]), len(graph_options["SUBPLOTS"][0]), squeeze=False, sharey=graph_options["SHAREY"])#1,1)
   print("Remember to put 'wrk' or other type into an ARG to get percentiles etc also from wrk now!")
 
   for ri, row in enumerate(graph_options["SUBPLOTS"]):
@@ -947,19 +803,12 @@ def main():
       if "iperf" in graph["ARGS"]: #args.iperf:
         graphs += len(graph["STATFILES"])
         plot_iperf(axes[ri][ci], graph["STATS"], graph)
-      #elif args.cpu: # TODO !!! mukaan muihin "cpu" "cpu-mean" in graph_options["ARGS"]
-      #  #print("Assuming 15 seconds between measurements!")
-      #  graphs += len(graph_options["STATFILES"]) + 1 # TODO graafien määrä oikein, nyt halutaan aina legend ni laitoin vaa +1
-      #  plot_cpu_usage(ax, stats_dict, graph_options)
+
       
       elif "netpipe" in graph["ARGS"]:
         graphs += 2
-        #ax2 = axes[ri][ci].twinx() # TODO maybe throughput to separate graph? Compare multiple netpipe results in one
-        # TODO and why does this no graph properly
+        #ax2 = axes[ri][ci].twinx() # maybe throughput to separate graph? Compare multiple netpipe results in one
         plot_netpipe(axes[ri][ci], graph["STATS"], graph)
-      #elif "sockperf" in graph["ARGS"]:
-      #  graphs += 2
-      #  plot_sockperf(axes[ri][ci], graph["STATS"], graph)
       elif "ib" in graph["ARGS"]:
         if "throughput" in graph["ARGS"]:
           ax2 = axes[ri][ci].twinx()
@@ -968,18 +817,6 @@ def main():
 
       # Shared functions for different benchmarks
       elif len(list(set(["wrk", "sockperf"]) & set(graph["ARGS"]))) > 0:
-        # TODO remove, these combined in one
-        '''
-        if "max" in graph["ARGS"]: #args.max:
-          graphs += 1
-          plot_max_latencies(axes[ri][ci], graph["STATS"], graph)
-        if "min" in graph["ARGS"]: #args.min:
-          graphs += 1
-          plot_min_latencies(axes[ri][ci], graph["STATS"], graph)
-        if "mean" in graph["ARGS"]: #args.mean:
-          graphs += 1
-          plot_mean_latencies(axes[ri][ci], graph["STATS"], graph)
-        '''
         if len(list(set(["max", "min", "mean"]) & set(graph["ARGS"]))) > 0:
           graphs += 2
           plot_latencies_maxminmean(axes[ri][ci], graph["STATS"], graph)
@@ -1051,7 +888,6 @@ def main():
     if "TITLE2" in graph_options:
       graph_options["TITLE"] += "\n" + graph_options["TITLE2"]
     fig.suptitle(graph_options["TITLE"])
-  #ax.set_title(graph_options["TITLE"] + "\n asdlol")
   # Either show or save fig
   #plt.show()
   plt.savefig(graph_options["FILENAME"])

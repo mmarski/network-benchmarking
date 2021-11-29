@@ -2,16 +2,11 @@
 
 #declare -a
 
-# this file to run wrk or sockperf (or iperf, TODO?)
+# run wrk or sockperf or iperf
 # ls -tr to get files in date modified first-last order
 
 # The prefix for the file
-FILEPREFX=paramstestrun
-
-# wrk-filesizes baremetallissa ja local tokaan benchmarkkeriin.
-# Aja wrk vaikka siitä wrk-vma kontista iha sama.. siel se on jo. tai no, eikös meillä oo se kontti mikä on Kubessa? kaiva se lol. Nginx on nginx-vma kontis.
-# -> skandyla/wrk kontti !! se pyörimään ja siihen ajetaan docker exec, lol.
-# NEXT sockperf-datasizes-VMA-100mps, latenssi jälleen
+FILEPREFX=testrun
 
 # For loop params. Use numbers 1-n
 # Wrk sizes: 13. Sockperf sizes: 16
@@ -26,7 +21,7 @@ USE_CONNARR=0
 #thread_array=(1 2 3 4 5 8 10 12 14)
 thread_array=(1 2 3 4 5 2 4 2 5)
 USE_THREADARR=0
-# WRK (Nginx) filesizes: 13. Generate them again: added 1472, 2kB
+# WRK (Nginx) filesizes: 13.
 # 1B 64B 512B 1kB 1472B 2kB 4kB 32kB 64kB 128kB 256kB 512kB 1M
 file_array=(1B 64B 512B 1kB 1472B 2kB 4kB 32kB 64kB 128kB 256kB 512kB 1M)
 USE_FILEARR=0
@@ -45,7 +40,6 @@ BINFILE=1kB
 DATASIZE=14 # For sockperf. 14 is the MINIMUM and default
 
 # 0 wrk, 1 sockperf
-# VMA settingi ja TODO mahdollisesti monitoroi myös vma_stats omaan tiedostoonsa
 SOCKPERF=0
 # Run: ping-pong or throughput
 SOCKPERF_RUN=ping-pong
@@ -66,29 +60,12 @@ CPU=1
 LOCAL=0
 
 # Any other settings? At this moment only for sockperf
-# --mps: messages per second for slower send testing. 1000 and 100
+# e.g. "--mps 100": messages per second for slower send testing. 1000 and 100
 ADDITIONAL_PARAMS=
 
 # Program arguments to replace any of the above
 # run-benchmark -l 1 -p sockperf-datasizes-VMA-hugepages-local -c 1 -t 180
-: '
-while getopts "s:r:v:l:c:k:p:a:t:b:f:" flag
-do
-	case "${flag}" in
-		s) SOCKPERF=${OPTARG};;
-		r) SOCKPERF_RUN=${OPTARG};;
-		v) VMA=${OPTARG};;
-		l) LOCAL=${OPTARG};;
-		c) CPU=${OPTARG};;
-		k) KUBERNETES=${OPTARG};;
-		p) FILEPREFX=${OPTARG};;
-		a) ADDITIONAL_PARAMS=${OPTARG};;
-		t) TIME=${OPTARG};;
-		b) BINFILE=${OPTARG};;
-		f) FREEFLOW=${OPTARG};;
-	esac
-done
-'
+
 while [ $# -gt 0 ] ; do
 	case $1 in
 		-s | --sockperf) SOCKPERF="$2" ;;
@@ -112,18 +89,14 @@ while [ $# -gt 0 ] ; do
 	esac
 	shift
 done
-# need long arguments for additional flags for:
-# Start-i, end-i, filearray, dataarray, connarray, threadarray
 
 # KMASTER=kubernetes master node, assumed the client is run also here in cluster
-# TODO tee ehk CLIENT ja SERVERBARE viel jos ne saattais erota jossain vaiheessa. samat ny
-# Tarvis muuttujan jossa ei oo root@ tai ubuntu@ tuota bare metal yhistyst varten
 KMASTER=ubuntu@192.168.1.112
 CLIENTBARE=ubuntu@192.168.1.111
 CLIENT=ubuntu@192.168.1.111
 SERVER=ubuntu@192.168.1.113
 SERVER_ADDR=192.168.1.113
-# Nokia servers are root so they give errors if using sudo
+# Nokia servers are root so they give errors if using sudo, hence a variable
 SUDO=sudo
 # VMA and Freeflow specific
 VMA_COMMAND=
@@ -167,7 +140,7 @@ then
 fi
 
 #CPU_ADDRESS=192.168.1.113
-# Selitys alemmasta: Bash suorittaa variablet jos ne on " quoteissa. single quoteissa ei. Me escapattiin awkin kohdalla siis tää toiminta koska kaikki tossa käyttää singlequoteja jo ja halutaan helposti tuplaquote ympärille... (Suoritetaan $2 jne vasta kohteessa)
+# Bash executes variables immediately if in "quotes". We escape this and want to execute $2 etc only in the destination
 CPUCOMMAND="for i in {1.."$TIME"}; do top -b -d1 -n1 | grep -i 'Cpu(s)'| awk '"'{print $2, $4, $8, $10, $12, $14, $16}'"'; sleep 1; done"
 
 SOCKPERF_SERVERIP=
@@ -178,15 +151,15 @@ then
 	if [ "$KUBERNETES" -gt 0 ]
 	then
 		echo Remember to check that the requested binary files exist in the server!
+		# Modify accordingly to the script destination
 		#scp /home/markus/SharedVB/automation/wrk-scripts/wrk-script.lua ${CLIENT}:~
-		# TODO! windows versio, modaa kun virtualbox taas toimii
 		scp "/c/Users/mteivo/OneDrive - Nokia/VBox-Shared/automation/wrk-scripts/wrk-script.lua" ${CLIENT}:~
 		ssh ${CLIENT} ${SUDO} mv wrk-script.lua /var/local/wrktest/
 	fi
 	if [ "$KUBERNETES" != 1 ]
 	then
 		echo Bare-metal to ${SERVER_ADDR}
-		# TODO! this is windows versio for this!
+		# Modify accordingly to the script destination
 		#scp /home/markus/SharedVB/automation/wrk-scripts/wrk-script.lua ${CLIENTBARE}:~
 		scp "/c/Users/mteivo/OneDrive - Nokia/VBox-Shared/automation/wrk-scripts/wrk-script.lua" ${CLIENTBARE}:~
 		ssh ${CLIENTBARE} ${SUDO} mv wrk-script.lua /var/local/wrktest/
@@ -203,9 +176,7 @@ then
 fi
 
 
-#for CONNECTIONS in "${conn_array[@]}"
 for iter in $(seq $I_START $I_END);
-#for BINFILE in "${file_array[@]}"
 do
 	i=("$iter"-1)
 	if [ "$USE_CONNARR" == 1 ]
@@ -257,8 +228,8 @@ do
 
 		if [ "$CPU" == 1 ]
 		then
-			# us=userspace sy=system/kernel ni=niced-user/userdefinedprio id=idleops wa=waitdisk/peripheral hi=hardwareint si=softwareint st=steal,involuntaryvirtual-cpuwait (hypervisor servicing another processor)
-				# Printataan kaikki paitsi nice. Nice process on siis alhaisemman prioriteetin ja miinukselle mentäessä korkea prio. (Niceä ei ole ellei erikseen user määritä alhaista priota)
+			# CPU data: us=userspace sy=system/kernel ni=niced-user/userdefinedprio id=idleops wa=waitdisk/peripheral hi=hardwareint si=softwareint st=steal,involuntaryvirtual-cpuwait (hypervisor servicing another processor)
+			# Get all except "nice", it is only used for lower priority processes
 			if [ "$LOCAL" == 1 ]
 			then
 				ssh ${CLIENT} ${CPUCOMMAND} > ${FILENAME}-kube-CPU &

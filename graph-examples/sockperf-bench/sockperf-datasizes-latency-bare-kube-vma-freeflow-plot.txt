@@ -1,0 +1,112 @@
+TITLE Sockperf: latency on different data sizes over 180s
+TITLE2 Baremetal, VMA on bare and Freeflow on Kube comparison
+
+FILENAME sockperf-datasizes-latency-bare-kube-vma-freeflow
+FILEDIR latencydata
+COLUMNS 2
+
+ARG percentiles 50 90 99 99.999
+ARGS max min mean
+ARGS sockperf latency
+ARG title Baremetal
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+FILES
+sockperf-datasizes-ping-pong-1-180s-14B-baremetal
+sockperf-datasizes-ping-pong-2-180s-32B-baremetal
+sockperf-datasizes-ping-pong-3-180s-64B-baremetal
+sockperf-datasizes-ping-pong-4-180s-256B-baremetal
+sockperf-datasizes-ping-pong-5-180s-512B-baremetal
+sockperf-datasizes-ping-pong-6-180s-1kB-baremetal
+sockperf-datasizes-ping-pong-7-180s-2kB-baremetal
+sockperf-datasizes-ping-pong-8-180s-4kB-baremetal
+sockperf-datasizes-ping-pong-9-180s-8kB-baremetal
+sockperf-datasizes-ping-pong-10-180s-32kB-baremetal
+sockperf-datasizes-ping-pong-11-180s-64kB-baremetal
+sockperf-datasizes-ping-pong-12-180s-128kB-baremetal
+sockperf-datasizes-ping-pong-13-180s-256kB-baremetal
+sockperf-datasizes-ping-pong-14-180s-512kB-baremetal
+sockperf-datasizes-ping-pong-15-180s-1M-baremetal
+
+
+SUBPLOT
+
+ARG percentiles 50 90 99 99.999
+ARGS max min mean
+ARGS sockperf latency
+ARG title VMA Baremetal
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+FILES
+sockperf-datasizes-VMA-ping-pong-1-180s-14B-baremetal
+sockperf-datasizes-VMA-ping-pong-2-180s-32B-baremetal
+sockperf-datasizes-VMA-ping-pong-3-180s-64B-baremetal
+sockperf-datasizes-VMA-ping-pong-4-180s-256B-baremetal
+sockperf-datasizes-VMA-ping-pong-5-180s-512B-baremetal
+sockperf-datasizes-VMA-ping-pong-6-180s-1kB-baremetal
+sockperf-datasizes-VMA-ping-pong-7-180s-2kB-baremetal
+sockperf-datasizes-VMA-ping-pong-8-180s-4kB-baremetal
+sockperf-datasizes-VMA-ping-pong-9-180s-8kB-baremetal
+sockperf-datasizes-VMA-ping-pong-10-180s-32kB-baremetal
+sockperf-datasizes-VMA-ping-pong-11-180s-64kB-baremetal
+sockperf-datasizes-VMA-ping-pong-12-180s-128kB-baremetal
+sockperf-datasizes-VMA-ping-pong-13-180s-256kB-baremetal
+sockperf-datasizes-VMA-ping-pong-14-180s-512kB-baremetal
+sockperf-datasizes-VMA-ping-pong-15-180s-1M-baremetal
+
+
+SUBPLOT
+
+ARG percentiles 50 90 99 99.999
+ARGS max min mean
+ARGS sockperf latency
+ARG title Kubernetes
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+FILES
+sockperf-datasizes-ping-pong-1-180s-14B-kube
+sockperf-datasizes-ping-pong-2-180s-32B-kube
+sockperf-datasizes-ping-pong-3-180s-64B-kube
+sockperf-datasizes-ping-pong-4-180s-256B-kube
+sockperf-datasizes-ping-pong-5-180s-512B-kube
+sockperf-datasizes-ping-pong-6-180s-1kB-kube
+sockperf-datasizes-ping-pong-7-180s-2kB-kube
+sockperf-datasizes-ping-pong-8-180s-4kB-kube
+sockperf-datasizes-ping-pong-9-180s-8kB-kube
+sockperf-datasizes-ping-pong-10-180s-32kB-kube
+sockperf-datasizes-ping-pong-11-180s-64kB-kube
+sockperf-datasizes-ping-pong-12-180s-128kB-kube
+sockperf-datasizes-ping-pong-13-180s-256kB-kube
+sockperf-datasizes-ping-pong-14-180s-512kB-kube
+sockperf-datasizes-ping-pong-15-180s-1M-kube
+
+
+SUBPLOT
+
+ARG percentiles 50 90 99 99.999
+ARGS max min mean
+ARGS sockperf latency
+ARG title Freeflow Kube
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,1472,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+FILES
+sockperf-datasizes-freeflow-ping-pong-1-180s-14B-kube
+sockperf-datasizes-freeflow-ping-pong-2-180s-32B-kube
+sockperf-datasizes-freeflow-ping-pong-3-180s-64B-kube
+sockperf-datasizes-freeflow-ping-pong-4-180s-256B-kube
+sockperf-datasizes-freeflow-ping-pong-5-180s-512B-kube
+sockperf-datasizes-freeflow-ping-pong-6-180s-1kB-kube
+sockperf-datasizes-freeflow-ping-pong-7-180s-1472B-kube
+sockperf-datasizes-freeflow-ping-pong-8-180s-2kB-kube
+sockperf-datasizes-freeflow-ping-pong-9-180s-4kB-kube
+sockperf-datasizes-freeflow-ping-pong-10-180s-8kB-kube
+sockperf-datasizes-freeflow-ping-pong-11-180s-32kB-kube
+sockperf-datasizes-freeflow-ping-pong-12-180s-64kB-kube
+sockperf-datasizes-freeflow-ping-pong-13-180s-128kB-kube
+sockperf-datasizes-freeflow-ping-pong-14-180s-256kB-kube
+sockperf-datasizes-freeflow-ping-pong-15-180s-512kB-kube
+sockperf-datasizes-freeflow-ping-pong-16-180s-1M-kube

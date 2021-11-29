@@ -1,0 +1,27 @@
+ib_read_bw -d mlx5_2 -a -F
+
+************************************
+* Waiting for client to connect... *
+************************************
+---------------------------------------------------------------------------------------
+                    RDMA_Read BW Test
+ Dual-port       : OFF          Device         : mlx5_2
+ Number of qps   : 1            Transport type : IB
+ Connection type : RC           Using SRQ      : OFF
+ PCIe relax order: ON
+ ibv_wr* API     : ON
+ CQ Moderation   : 100
+ Mtu             : 1024[B]
+ Link type       : Ethernet
+ GID index       : 3
+ Outstand reads  : 16
+ rdma_cm QPs     : OFF
+ Data ex. method : Ethernet
+---------------------------------------------------------------------------------------
+ local address: LID 0000 QPN 0x0151 PSN 0xa2aa6e OUT 0x10 RKey 0x0073e3 VAddr 0x007f0bbbaef000
+ GID: 00:00:00:00:00:00:00:00:00:00:255:255:15:15:15:05
+ remote address: LID 0000 QPN 0x0179 PSN 0x6472ee OUT 0x10 RKey 0x009961 VAddr 0x007f115c2ea000
+ GID: 00:00:00:00:00:00:00:00:00:00:255:255:15:15:15:06
+---------------------------------------------------------------------------------------
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+ 8388608    1000             2758.95            2758.94            0.000345

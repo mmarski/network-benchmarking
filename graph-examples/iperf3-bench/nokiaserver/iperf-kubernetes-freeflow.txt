@@ -1,0 +1,20 @@
+iperf3 -c iperf3-ff-service
+Connecting to host iperf3-ff-service, port 5201
+[  6] local 10.42.1.37 port 55730 connected to 10.43.235.166 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  6]   0.00-1.00   sec  2.25 GBytes  19.4 Gbits/sec    0   14.1 KBytes
+[  6]   1.00-2.00   sec  2.67 GBytes  22.9 Gbits/sec    0   14.1 KBytes
+[  6]   2.00-3.00   sec  2.56 GBytes  22.0 Gbits/sec    0   14.1 KBytes
+[  6]   3.00-4.00   sec  2.62 GBytes  22.5 Gbits/sec    0   14.1 KBytes
+[  6]   4.00-5.00   sec  2.40 GBytes  20.6 Gbits/sec    0   14.1 KBytes
+[  6]   5.00-6.00   sec  2.60 GBytes  22.3 Gbits/sec    0   14.1 KBytes
+[  6]   6.00-7.00   sec  2.52 GBytes  21.7 Gbits/sec    0   14.1 KBytes
+[  6]   7.00-8.00   sec  2.57 GBytes  22.1 Gbits/sec    0   14.1 KBytes
+[  6]   8.00-9.00   sec  2.53 GBytes  21.7 Gbits/sec    0   14.1 KBytes
+[  6]   9.00-10.00  sec  2.61 GBytes  22.4 Gbits/sec    0   14.1 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  6]   0.00-10.00  sec  25.3 GBytes  21.8 Gbits/sec    0             sender
+[  6]   0.00-10.04  sec  25.3 GBytes  21.7 Gbits/sec                  receiver
+
+iperf Done.

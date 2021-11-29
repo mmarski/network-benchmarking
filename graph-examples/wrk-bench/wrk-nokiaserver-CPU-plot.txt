@@ -1,0 +1,74 @@
+TITLE wrk-Nginx CPU on Nokia AirFrame setup
+TITLE2 180 seconds, 1 connection, 1 thread
+
+FILENAME wrk-nokiaserver-CPU
+FILEDIR nokiaserver-actual/testdata
+COLUMNS 2
+
+ARG cpu-mean user kernel sw-int
+ARG title Bare metal CPU
+AXES Filesize,%
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+CPUFILES
+wrk-filesizes-sendfileon-1-1c-1t-180s-1B-baremetal-CPU-client
+wrk-filesizes-sendfileon-1-1c-1t-180s-1B-baremetal-CPU-server
+wrk-filesizes-sendfileon-2-1c-1t-180s-64B-baremetal-CPU-client
+wrk-filesizes-sendfileon-2-1c-1t-180s-64B-baremetal-CPU-server
+wrk-filesizes-sendfileon-3-1c-1t-180s-512B-baremetal-CPU-client
+wrk-filesizes-sendfileon-3-1c-1t-180s-512B-baremetal-CPU-server
+wrk-filesizes-sendfileon-4-1c-1t-180s-1kB-baremetal-CPU-client
+wrk-filesizes-sendfileon-4-1c-1t-180s-1kB-baremetal-CPU-server
+wrk-filesizes-sendfileon-5-1c-1t-180s-1472B-baremetal-CPU-client
+wrk-filesizes-sendfileon-5-1c-1t-180s-1472B-baremetal-CPU-server
+wrk-filesizes-sendfileon-6-1c-1t-180s-2kB-baremetal-CPU-client
+wrk-filesizes-sendfileon-6-1c-1t-180s-2kB-baremetal-CPU-server
+wrk-filesizes-sendfileon-7-1c-1t-180s-4kB-baremetal-CPU-client
+wrk-filesizes-sendfileon-7-1c-1t-180s-4kB-baremetal-CPU-server
+wrk-filesizes-sendfileon-8-1c-1t-180s-32kB-baremetal-CPU-client
+wrk-filesizes-sendfileon-8-1c-1t-180s-32kB-baremetal-CPU-server
+wrk-filesizes-sendfileon-9-1c-1t-180s-64kB-baremetal-CPU-client
+wrk-filesizes-sendfileon-9-1c-1t-180s-64kB-baremetal-CPU-server
+wrk-filesizes-sendfileon-10-1c-1t-180s-128kB-baremetal-CPU-server
+wrk-filesizes-sendfileon-10-1c-1t-180s-128kB-baremetal-CPU-client
+wrk-filesizes-sendfileon-11-1c-1t-180s-256kB-baremetal-CPU-client
+wrk-filesizes-sendfileon-11-1c-1t-180s-256kB-baremetal-CPU-server
+wrk-filesizes-sendfileon-12-1c-1t-180s-512kB-baremetal-CPU-client
+wrk-filesizes-sendfileon-12-1c-1t-180s-512kB-baremetal-CPU-server
+wrk-filesizes-sendfileon-13-1c-1t-180s-1M-baremetal-CPU-client
+wrk-filesizes-sendfileon-13-1c-1t-180s-1M-baremetal-CPU-server
+
+SUBPLOT
+
+ARG cpu-mean user kernel sw-int
+ARG title Flannel CPU
+AXES Filesize,%
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+CPUFILES
+wrk-filesizes-1-1c-1t-180s-1B-kube-CPU-client
+wrk-filesizes-1-1c-1t-180s-1B-kube-CPU-server
+wrk-filesizes-2-1c-1t-180s-64B-kube-CPU-server
+wrk-filesizes-2-1c-1t-180s-64B-kube-CPU-client
+wrk-filesizes-3-1c-1t-180s-512B-kube-CPU-server
+wrk-filesizes-3-1c-1t-180s-512B-kube-CPU-client
+wrk-filesizes-4-1c-1t-180s-1kB-kube-CPU-server
+wrk-filesizes-4-1c-1t-180s-1kB-kube-CPU-client
+wrk-filesizes-5-1c-1t-180s-1472B-kube-CPU-server
+wrk-filesizes-5-1c-1t-180s-1472B-kube-CPU-client
+wrk-filesizes-6-1c-1t-180s-2kB-kube-CPU-server
+wrk-filesizes-6-1c-1t-180s-2kB-kube-CPU-client
+wrk-filesizes-7-1c-1t-180s-4kB-kube-CPU-server
+wrk-filesizes-7-1c-1t-180s-4kB-kube-CPU-client
+wrk-filesizes-8-1c-1t-180s-32kB-kube-CPU-server
+wrk-filesizes-8-1c-1t-180s-32kB-kube-CPU-client
+wrk-filesizes-9-1c-1t-180s-64kB-kube-CPU-server
+wrk-filesizes-9-1c-1t-180s-64kB-kube-CPU-client
+wrk-filesizes-10-1c-1t-180s-128kB-kube-CPU-server
+wrk-filesizes-10-1c-1t-180s-128kB-kube-CPU-client
+wrk-filesizes-11-1c-1t-180s-256kB-kube-CPU-server
+wrk-filesizes-11-1c-1t-180s-256kB-kube-CPU-client
+wrk-filesizes-12-1c-1t-180s-512kB-kube-CPU-server
+wrk-filesizes-12-1c-1t-180s-512kB-kube-CPU-client
+wrk-filesizes-13-1c-1t-180s-1M-kube-CPU-server
+wrk-filesizes-13-1c-1t-180s-1M-kube-CPU-client

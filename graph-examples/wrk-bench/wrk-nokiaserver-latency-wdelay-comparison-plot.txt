@@ -1,0 +1,78 @@
+TITLE wrk-Nginx latencies with message delays on Nokia Airframe 
+TITLE2 180 seconds, 1 connection, 1 thread
+
+FILENAME wrk-nokiaserver-latency-comparison-wdelay
+COLUMNS 2
+FILEDIR nokiaserver-actual/testdata
+
+ARG percentiles 99
+ARGS mean wrk
+ARG title 1ms message delay
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+COMPARE bare,kube
+
+FILES
+wrk-filesizes-delay1-sendfileon-1-1c-1t-180s-1B-baremetal
+wrk-filesizes-delay1-sendfileon-2-1c-1t-180s-64B-baremetal
+wrk-filesizes-delay1-sendfileon-3-1c-1t-180s-512B-baremetal
+wrk-filesizes-delay1-sendfileon-4-1c-1t-180s-1kB-baremetal
+wrk-filesizes-delay1-sendfileon-5-1c-1t-180s-1472B-baremetal
+wrk-filesizes-delay1-sendfileon-6-1c-1t-180s-2kB-baremetal
+wrk-filesizes-delay1-sendfileon-7-1c-1t-180s-4kB-baremetal
+wrk-filesizes-delay1-sendfileon-8-1c-1t-180s-32kB-baremetal
+wrk-filesizes-delay1-sendfileon-9-1c-1t-180s-64kB-baremetal
+wrk-filesizes-delay1-sendfileon-10-1c-1t-180s-128kB-baremetal
+wrk-filesizes-delay1-sendfileon-11-1c-1t-180s-256kB-baremetal
+wrk-filesizes-delay1-sendfileon-12-1c-1t-180s-512kB-baremetal
+wrk-filesizes-delay1-sendfileon-13-1c-1t-180s-1M-baremetal
+wrk-filesizes-delay1-1-1c-1t-180s-1B-kube
+wrk-filesizes-delay1-2-1c-1t-180s-64B-kube
+wrk-filesizes-delay1-3-1c-1t-180s-512B-kube
+wrk-filesizes-delay1-4-1c-1t-180s-1kB-kube
+wrk-filesizes-delay1-5-1c-1t-180s-1472B-kube
+wrk-filesizes-delay1-6-1c-1t-180s-2kB-kube
+wrk-filesizes-delay1-7-1c-1t-180s-4kB-kube
+wrk-filesizes-delay1-8-1c-1t-180s-32kB-kube
+wrk-filesizes-delay1-9-1c-1t-180s-64kB-kube
+wrk-filesizes-delay1-10-1c-1t-180s-128kB-kube
+wrk-filesizes-delay1-11-1c-1t-180s-256kB-kube
+wrk-filesizes-delay1-12-1c-1t-180s-512kB-kube
+wrk-filesizes-delay1-13-1c-1t-180s-1M-kube
+
+SUBPLOT
+
+ARG percentiles 99
+ARGS mean wrk
+ARG title 10ms message delay
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+COMPARE bare,kube
+
+FILES
+wrk-filesizes-delay10-sendfileon-1-1c-1t-180s-1B-baremetal
+wrk-filesizes-delay10-sendfileon-2-1c-1t-180s-64B-baremetal
+wrk-filesizes-delay10-sendfileon-3-1c-1t-180s-512B-baremetal
+wrk-filesizes-delay10-sendfileon-4-1c-1t-180s-1kB-baremetal
+wrk-filesizes-delay10-sendfileon-5-1c-1t-180s-1472B-baremetal
+wrk-filesizes-delay10-sendfileon-6-1c-1t-180s-2kB-baremetal
+wrk-filesizes-delay10-sendfileon-7-1c-1t-180s-4kB-baremetal
+wrk-filesizes-delay10-sendfileon-8-1c-1t-180s-32kB-baremetal
+wrk-filesizes-delay10-sendfileon-9-1c-1t-180s-64kB-baremetal
+wrk-filesizes-delay10-sendfileon-10-1c-1t-180s-128kB-baremetal
+wrk-filesizes-delay10-sendfileon-11-1c-1t-180s-256kB-baremetal
+wrk-filesizes-delay10-sendfileon-12-1c-1t-180s-512kB-baremetal
+wrk-filesizes-delay10-sendfileon-13-1c-1t-180s-1M-baremetal
+wrk-filesizes-delay10-1-1c-1t-180s-1B-kube
+wrk-filesizes-delay10-2-1c-1t-180s-64B-kube
+wrk-filesizes-delay10-3-1c-1t-180s-512B-kube
+wrk-filesizes-delay10-4-1c-1t-180s-1kB-kube
+wrk-filesizes-delay10-5-1c-1t-180s-1472B-kube
+wrk-filesizes-delay10-6-1c-1t-180s-2kB-kube
+wrk-filesizes-delay10-7-1c-1t-180s-4kB-kube
+wrk-filesizes-delay10-8-1c-1t-180s-32kB-kube
+wrk-filesizes-delay10-9-1c-1t-180s-64kB-kube
+wrk-filesizes-delay10-10-1c-1t-180s-128kB-kube
+wrk-filesizes-delay10-11-1c-1t-180s-256kB-kube
+wrk-filesizes-delay10-12-1c-1t-180s-512kB-kube
+wrk-filesizes-delay10-13-1c-1t-180s-1M-kube

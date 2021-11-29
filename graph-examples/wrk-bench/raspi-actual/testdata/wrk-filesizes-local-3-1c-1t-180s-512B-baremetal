@@ -1,0 +1,26 @@
+Running 3m test @ http://localhost:90/512B.bin
+  1 threads and 1 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   424.05us    3.38ms 114.19ms   99.60%
+    Req/Sec     3.78k   270.97     4.20k    91.94%
+  677791 requests in 3.00m, 500.27MB read
+Requests/sec:   3765.46
+Transfer/sec:      2.78MB
+LATENCY
+MAX,114187
+MIN,181
+MEAN,424.04608498178
+STDEV,3380.5800963013
+50%,237
+90%,288
+99%,536
+99.999%,112597
+SUMMARY
+DURATION,180002266
+REQUESTS,677791
+BYTES,524576349
+CONNERR,0
+READERR,0
+WRITERR,0
+STATERR,0
+TIMEOUT,0

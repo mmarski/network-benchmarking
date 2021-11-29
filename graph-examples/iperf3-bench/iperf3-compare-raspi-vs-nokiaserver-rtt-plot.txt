@@ -1,0 +1,90 @@
+TITLE iperf3 RTT test setup comparison
+FILENAME iperf3-compare-raspi-vs-nokiaserver-rtt
+COLUMNS 2
+FILEDIR nokiaserver/iperf-datasizes
+
+ARGS iperf latency min mean us nology floatlegend
+ARG title Nokia Airframe setup
+AXES bytes,us
+XAXIS 14,32,64,256,512,1k,1472,2k,4k,8k,32k,64k,128k,256k,512k,1M
+COMPARE bare,kube
+LABELS bare,Flannel
+
+FILES
+iperf-datasizes-1-10s-14B-baremetal-json
+iperf-datasizes-2-10s-32B-baremetal-json
+iperf-datasizes-3-10s-64B-baremetal-json
+iperf-datasizes-4-10s-256B-baremetal-json
+iperf-datasizes-5-10s-512B-baremetal-json
+iperf-datasizes-6-10s-1kB-baremetal-json
+iperf-datasizes-7-10s-1472B-baremetal-json
+iperf-datasizes-8-10s-2kB-baremetal-json
+iperf-datasizes-9-10s-4kB-baremetal-json
+iperf-datasizes-10-10s-8kB-baremetal-json
+iperf-datasizes-11-10s-32kB-baremetal-json
+iperf-datasizes-12-10s-64kB-baremetal-json
+iperf-datasizes-13-10s-128kB-baremetal-json
+iperf-datasizes-14-10s-256kB-baremetal-json
+iperf-datasizes-15-10s-512kB-baremetal-json
+iperf-datasizes-16-10s-1M-baremetal-json
+iperf-datasizes-1-10s-14B-kube-json
+iperf-datasizes-2-10s-32B-kube-json
+iperf-datasizes-3-10s-64B-kube-json
+iperf-datasizes-4-10s-256B-kube-json
+iperf-datasizes-5-10s-512B-kube-json
+iperf-datasizes-6-10s-1kB-kube-json
+iperf-datasizes-7-10s-1472B-kube-json
+iperf-datasizes-8-10s-2kB-kube-json
+iperf-datasizes-9-10s-4kB-kube-json
+iperf-datasizes-10-10s-8kB-kube-json
+iperf-datasizes-11-10s-32kB-kube-json
+iperf-datasizes-12-10s-64kB-kube-json
+iperf-datasizes-13-10s-128kB-kube-json
+iperf-datasizes-14-10s-256kB-kube-json
+iperf-datasizes-15-10s-512kB-kube-json
+iperf-datasizes-16-10s-1M-kube-json
+
+
+SUBPLOT
+
+ARGS iperf latency min mean nology floatlegend
+ARG title Raspberry Pi setup
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,1472,2k,4k,8k,32k,64k,128k,256k,512k,1M
+COMPARE bare,kube
+LABELS bare,Flannel
+
+FILES
+FILEDIR raspi/iperf-datasizes
+iperf-datasizes-1-10s-14B-baremetal-json
+iperf-datasizes-2-10s-32B-baremetal-json
+iperf-datasizes-3-10s-64B-baremetal-json
+iperf-datasizes-4-10s-256B-baremetal-json
+iperf-datasizes-5-10s-512B-baremetal-json
+iperf-datasizes-6-10s-1kB-baremetal-json
+iperf-datasizes-7-10s-1472B-baremetal-json
+iperf-datasizes-8-10s-2kB-baremetal-json
+iperf-datasizes-9-10s-4kB-baremetal-json
+iperf-datasizes-10-10s-8kB-baremetal-json
+iperf-datasizes-11-10s-32kB-baremetal-json
+iperf-datasizes-12-10s-64kB-baremetal-json
+iperf-datasizes-13-10s-128kB-baremetal-json
+iperf-datasizes-14-10s-256kB-baremetal-json
+iperf-datasizes-15-10s-512kB-baremetal-json
+iperf-datasizes-16-10s-1M-baremetal-json
+iperf-datasizes-hostgw-1-10s-14B-kube-json
+iperf-datasizes-hostgw-2-10s-32B-kube-json
+iperf-datasizes-hostgw-3-10s-64B-kube-json
+iperf-datasizes-hostgw-4-10s-256B-kube-json
+iperf-datasizes-hostgw-5-10s-512B-kube-json
+iperf-datasizes-hostgw-6-10s-1kB-kube-json
+iperf-datasizes-hostgw-7-10s-1472B-kube-json
+iperf-datasizes-hostgw-8-10s-2kB-kube-json
+iperf-datasizes-hostgw-9-10s-4kB-kube-json
+iperf-datasizes-hostgw-10-10s-8kB-kube-json
+iperf-datasizes-hostgw-11-10s-32kB-kube-json
+iperf-datasizes-hostgw-12-10s-64kB-kube-json
+iperf-datasizes-hostgw-13-10s-128kB-kube-json
+iperf-datasizes-hostgw-14-10s-256kB-kube-json
+iperf-datasizes-hostgw-15-10s-512kB-kube-json
+iperf-datasizes-hostgw-16-10s-1M-kube-json

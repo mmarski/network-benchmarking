@@ -1,0 +1,41 @@
+LD_PRELOAD=libvma.so iperf3 --client localhost
+ VMA INFO: ---------------------------------------------------------------------------
+ VMA INFO: VMA_VERSION: 9.2.2-1 Release built on Mar 29 2021 12:43:53
+ VMA INFO: Cmd Line: iperf3 --client localhost
+ VMA INFO: OFED Version: MLNX_OFED_LINUX-5.3-1.0.0.1:
+ VMA INFO: ---------------------------------------------------------------------------
+ VMA INFO: Log Level                      INFO                       [VMA_TRACELEVEL]
+ VMA INFO: ---------------------------------------------------------------------------
+ VMA WARNING: **************************************************************
+ VMA WARNING: * NO IMMEDIATE ACTION NEEDED!
+ VMA WARNING: * Not enough hugepage resources for VMA memory allocation.
+ VMA WARNING: * VMA will continue working with regular memory allocation.
+ VMA INFO:    * Optional:
+ VMA INFO:    *   1. Switch to a different memory allocation type
+ VMA INFO:    *      (VMA_MEM_ALLOC_TYPE!= 2)
+ VMA INFO:    *   2. Restart process after increasing the number of
+ VMA INFO:    *      hugepages resources in the system:
+ VMA INFO:    *      "echo 1000000000 > /proc/sys/kernel/shmmax"
+ VMA INFO:    *      "echo 800 > /proc/sys/vm/nr_hugepages"
+ VMA WARNING: * Please refer to the memory allocation section in the VMA's
+ VMA WARNING: * User Manual for more information
+ VMA WARNING: **************************************************************
+Connecting to host localhost, port 5201
+[ 24] local ::1 port 36726 connected to ::1 port 5201
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[ 24]   0.00-1.00   sec  4.82 GBytes  41.4 Gbits/sec    0   1.25 MBytes
+[ 24]   1.00-2.00   sec  5.52 GBytes  47.4 Gbits/sec    0   1.25 MBytes
+[ 24]   2.00-3.00   sec  5.43 GBytes  46.7 Gbits/sec    0   1.25 MBytes
+[ 24]   3.00-4.00   sec  5.46 GBytes  46.9 Gbits/sec    0   1.25 MBytes
+[ 24]   4.00-5.00   sec  5.37 GBytes  46.1 Gbits/sec    0   1.25 MBytes
+[ 24]   5.00-6.00   sec  5.47 GBytes  47.0 Gbits/sec    0   1.25 MBytes
+[ 24]   6.00-7.00   sec  5.45 GBytes  46.8 Gbits/sec    0   1.25 MBytes
+[ 24]   7.00-8.00   sec  5.47 GBytes  47.0 Gbits/sec    0   1.25 MBytes
+[ 24]   8.00-9.00   sec  5.42 GBytes  46.5 Gbits/sec    0   1.25 MBytes
+[ 24]   9.00-10.00  sec  5.53 GBytes  47.5 Gbits/sec    0   1.25 MBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[ 24]   0.00-10.00  sec  53.9 GBytes  46.3 Gbits/sec    0             sender
+[ 24]   0.00-10.00  sec  53.9 GBytes  46.3 Gbits/sec                  receiver
+
+iperf Done.

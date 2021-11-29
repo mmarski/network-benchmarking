@@ -1,0 +1,54 @@
+TITLE Sockperf vs wrk: test tool latency comparison on Nokia Airframe bare metal
+
+FILENAME compare-wrk-sockperf-nokia-latency-bare
+COLUMNS 2
+FILEDIR sockperf-bench/nokia-latencydata
+SHAREY
+
+ARG percentiles 50 90 99 99.999
+ARGS max min mean floatlegend
+ARGS sockperf latency
+ARG title Sockperf
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+FILES
+sockperf-datasizes-ping-pong-1-180s-14B-baremetal
+sockperf-datasizes-ping-pong-2-180s-32B-baremetal
+sockperf-datasizes-ping-pong-3-180s-64B-baremetal
+sockperf-datasizes-ping-pong-4-180s-256B-baremetal
+sockperf-datasizes-ping-pong-5-180s-512B-baremetal
+sockperf-datasizes-ping-pong-6-180s-1kB-baremetal
+sockperf-datasizes-ping-pong-7-180s-2kB-baremetal
+sockperf-datasizes-ping-pong-8-180s-4kB-baremetal
+sockperf-datasizes-ping-pong-9-180s-8kB-baremetal
+sockperf-datasizes-ping-pong-10-180s-32kB-baremetal
+sockperf-datasizes-ping-pong-11-180s-64kB-baremetal
+sockperf-datasizes-ping-pong-12-180s-128kB-baremetal
+sockperf-datasizes-ping-pong-13-180s-256kB-baremetal
+sockperf-datasizes-ping-pong-14-180s-512kB-baremetal
+sockperf-datasizes-ping-pong-15-180s-1M-baremetal
+
+SUBPLOT
+
+ARG percentiles 50 90 99 99.999
+ARGS max min mean wrk
+ARG title wrk-Nginx
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+FILEDIR wrk-bench/nokiaserver-actual/testdata
+wrk-filesizes-sendfileon-1-1c-1t-180s-1B-baremetal
+wrk-filesizes-sendfileon-2-1c-1t-180s-64B-baremetal
+wrk-filesizes-sendfileon-3-1c-1t-180s-512B-baremetal
+wrk-filesizes-sendfileon-4-1c-1t-180s-1kB-baremetal
+wrk-filesizes-sendfileon-5-1c-1t-180s-1472B-baremetal
+wrk-filesizes-sendfileon-6-1c-1t-180s-2kB-baremetal
+wrk-filesizes-sendfileon-7-1c-1t-180s-4kB-baremetal
+wrk-filesizes-sendfileon-8-1c-1t-180s-32kB-baremetal
+wrk-filesizes-sendfileon-9-1c-1t-180s-64kB-baremetal
+wrk-filesizes-sendfileon-10-1c-1t-180s-128kB-baremetal
+wrk-filesizes-sendfileon-11-1c-1t-180s-256kB-baremetal
+wrk-filesizes-sendfileon-12-1c-1t-180s-512kB-baremetal
+wrk-filesizes-sendfileon-13-1c-1t-180s-1M-baremetal

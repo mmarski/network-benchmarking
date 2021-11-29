@@ -1,0 +1,26 @@
+Running 1m test @ http://localhost:90/1472B.bin
+  1 threads and 1 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   524.48us  141.22us   5.78ms   91.05%
+    Req/Sec    93.68      5.03   101.00     64.33%
+  5612 requests in 1.00m, 9.29MB read
+Requests/sec:     93.45
+Transfer/sec:    158.33KB
+LATENCY
+MAX,5779
+MIN,237
+MEAN,524.48325017819
+STDEV,141.21820693008
+50%,501
+90%,623
+99%,887
+99.999%,5779
+SUMMARY
+DURATION,60052996
+REQUESTS,5612
+BYTES,9736540
+CONNERR,0
+READERR,0
+WRITERR,0
+STATERR,0
+TIMEOUT,0

@@ -1,0 +1,53 @@
+raw_ethernet_bw -d mlx5_0 -F --client -E b8:59:9f:e9:ac:ce -B 0c:42:a1:4e:ca:e2 --tcp -j 10.37.215.9 -J 10.37.215.10 -k 2000 -K 2000 -D 60 --cpu_util
+ Max msg size in RawEth is MTU 1518
+ Changing msg size to this MTU
+---------------------------------------------------------------------------------------
+                    Send BW Test
+ Dual-port       : OFF          Device         : mlx5_0
+ Number of qps   : 1            Transport type : IB
+ Connection type : RawEth               Using SRQ      : OFF
+ PCIe relax order: ON
+ ibv_wr* API     : OFF
+ TX depth        : 128
+ CQ Moderation   : 1
+ Mtu             : 1518[B]
+ Link type       : Ethernet
+ GID index       : 0
+ Max inline data : 0[B]
+ rdma_cm QPs     : OFF
+ Data ex. method : Ethernet
+---------------------------------------------------------------------------------------
+**raw ethernet header****************************************
+
+--------------------------------------------------------------
+| Dest MAC         | Src MAC          | Packet Type          |
+|------------------------------------------------------------|
+| B8:59:9F:E9:AC:CE| 0C:42:A1:4E:CA:E2|IPv4                  |
+|------------------------------------------------------------|
+
+**IP header**************
+|-----------------------|
+|Version   |4           |
+|Ihl       |5           |
+|TOS       |0           |
+|TOT LEN   |1500        |
+|ID        |0           |
+|Frag      |0           |
+|TTL       |64          |
+|protocol  |TCP         |
+|Check sum |B2BE        |
+|Source IP |10.37.215.9 |
+|Dest IP   |10.37.215.10|
+|-----------------------|
+
+**TCP header***********
+|---------------------|
+|Src  Port |2000      |
+|Dest Port |2000      |
+|offset    |5         |
+|window    |8192      |
+|---------------------|
+---------------------------------------------------------------------------------------
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]    CPU_Util[%]
+ 1518       60939335         0.00               2940.59            2.031250         2.18
+---------------------------------------------------------------------------------------

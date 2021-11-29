@@ -1,0 +1,13 @@
+TITLE Latency percentiles over 180 seconds,
+TITLE2 wrk 1 thread/connection, nginx 1 B, 5 runs, bare-metal
+ARG percentile 50 90 99 99.999
+FILENAME percentiles-10s-5it
+AXES iteration,us
+XAXIS 1,2,3,4,5
+
+FILES
+wrk-1c-1t-180s-1B-1
+wrk-1c-1t-180s-1B-2
+wrk-1c-1t-180s-1B-3
+wrk-1c-1t-180s-1B-4
+wrk-1c-1t-180s-1B-5

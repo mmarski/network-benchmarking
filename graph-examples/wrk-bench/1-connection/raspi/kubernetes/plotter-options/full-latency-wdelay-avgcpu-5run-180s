@@ -1,0 +1,35 @@
+TITLE wrk latency vs CPU usage between 5 runs,
+TITLE2 10ms delay between requests, 180 seconds per run, nginx 1 B transfer
+FILENAME full-latency-wdelay-avgcpu-5run-180s
+FILEDIR testdata
+COLUMNS 2
+
+ARG percentiles 50 90 99 99.999
+ARGS min max mean
+
+AXES run,ms
+XAXIS 1,2,3,4,5
+
+FILES
+wrk-latency5run-wdelay-1c-1t-180s-1B-1
+wrk-latency5run-wdelay-1c-1t-180s-1B-2
+wrk-latency5run-wdelay-1c-1t-180s-1B-3
+wrk-latency5run-wdelay-1c-1t-180s-1B-4
+wrk-latency5run-wdelay-1c-1t-180s-1B-5
+
+SUBPLOT
+ARG cpu-mean user kernel sw-int peripheral
+AXES run,%
+XAXIS 1,2,3,4,5
+
+CPUFILES
+wrk-latency5run-wdelay-1c-1t-180s-1B-1-CPU-client
+wrk-latency5run-wdelay-1c-1t-180s-1B-1-CPU-server
+wrk-latency5run-wdelay-1c-1t-180s-1B-2-CPU-client
+wrk-latency5run-wdelay-1c-1t-180s-1B-2-CPU-server
+wrk-latency5run-wdelay-1c-1t-180s-1B-3-CPU-client
+wrk-latency5run-wdelay-1c-1t-180s-1B-3-CPU-server
+wrk-latency5run-wdelay-1c-1t-180s-1B-4-CPU-client
+wrk-latency5run-wdelay-1c-1t-180s-1B-4-CPU-server
+wrk-latency5run-wdelay-1c-1t-180s-1B-5-CPU-client
+wrk-latency5run-wdelay-1c-1t-180s-1B-5-CPU-server

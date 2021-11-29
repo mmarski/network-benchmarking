@@ -1,0 +1,11 @@
+sockperf: [2;35m== version #3.6-no.git == [0m
+sockperf[CLIENT] send on:
+[ 0] IP = 10.43.252.192   PORT = 11111 # TCP
+sockperf: Warmup stage (sending a few dummy messages)...
+sockperf: Starting test...
+sockperf: Test end (interrupted by timer)
+sockperf: Test ended
+sockperf: Total of 799105 messages sent in 10.001 sec
+
+sockperf: Summary: Message Rate is 79906 [msg/sec]
+sockperf: Summary: BandWidth is 112.173 MBps (897.382 Mbps)

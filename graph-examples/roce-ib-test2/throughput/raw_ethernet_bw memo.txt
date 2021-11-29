@@ -1,0 +1,4 @@
+raw_ethernet_bw -d mlx5_0 -F --server -B b8:59:9f:e9:ac:ce -E 0c:42:a1:4e:ca:e2 --tcp -j 10.37.215.9 -J 10.37.215.10 -k 2000 -K 2000 -D 60 --cpu_util
+
+-s size perään
+Default size 65536

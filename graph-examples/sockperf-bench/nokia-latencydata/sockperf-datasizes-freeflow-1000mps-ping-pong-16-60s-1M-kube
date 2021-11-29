@@ -1,0 +1,26 @@
+sockperf: [2;35m== version #3.7-7.git05c62507670b == [0m
+sockperf[CLIENT] send on:sockperf: using recvfrom() to block on socket(s)
+
+[ 0] IP = 10.43.101.124   PORT = 11111 # TCP
+sockperf: Warmup stage (sending a few dummy messages)...
+sockperf: Starting test...
+sockperf: Test end (interrupted by timer)
+sockperf: Test ended
+sockperf: [Total Run] RunTime=60.000 sec; Warm up time=400 msec; SentMessages=52179; ReceivedMessages=52178
+sockperf: ========= Printing statistics for Server No: 0
+sockperf: [Valid Duration] RunTime=59.549 sec; SentMessages=51917; ReceivedMessages=51917
+sockperf: [2;35m====> avg-latency=573.410 (std-dev=52.957)[0m
+sockperf: # dropped messages = 0; # duplicated messages = 0; # out-of-order messages = 0
+sockperf: Summary: Latency is 573.410 usec
+sockperf: [2;35mTotal 51917 observations[0m; each percentile contains 519.17 observations
+sockperf: ---> <MAX> observation = 1104.572
+sockperf: ---> percentile 99.999 = 1064.907
+sockperf: ---> percentile 99.990 =  972.219
+sockperf: ---> percentile 99.900 =  846.795
+sockperf: ---> percentile 99.000 =  736.112
+sockperf: ---> percentile 90.000 =  641.655
+sockperf: ---> percentile 75.000 =  602.553
+sockperf: ---> percentile 50.000 =  563.724
+sockperf: ---> percentile 25.000 =  534.373
+sockperf: ---> <MIN> observation =  435.507
+sockperf: Info: The requested message-per-second rate is too high. Try tuning --mps or --burst arguments

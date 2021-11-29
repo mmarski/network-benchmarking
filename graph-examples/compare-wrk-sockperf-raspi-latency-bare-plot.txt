@@ -1,0 +1,55 @@
+TITLE Sockperf vs wrk: test tool latency comparison on Raspberry Pi bare metal
+
+FILENAME compare-wrk-sockperf-raspi-latency-bare
+COLUMNS 2
+FILEDIR sockperf-bench/raspi-data
+SHAREY
+
+ARG percentiles 50 90 99 99.999
+ARGS max min mean floatlegend
+ARGS sockperf latency
+ARG title Sockperf, 60s
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,1472,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+FILES
+sockperf-datasizes-ping-pong-1-60s-14B-baremetal
+sockperf-datasizes-ping-pong-2-60s-32B-baremetal
+sockperf-datasizes-ping-pong-3-60s-64B-baremetal
+sockperf-datasizes-ping-pong-4-60s-256B-baremetal
+sockperf-datasizes-ping-pong-5-60s-512B-baremetal
+sockperf-datasizes-ping-pong-6-60s-1kB-baremetal
+sockperf-datasizes-ping-pong-7-60s-1472B-baremetal
+sockperf-datasizes-ping-pong-8-60s-2kB-baremetal
+sockperf-datasizes-ping-pong-9-60s-4kB-baremetal
+sockperf-datasizes-ping-pong-10-60s-8kB-baremetal
+sockperf-datasizes-ping-pong-11-60s-32kB-baremetal
+sockperf-datasizes-ping-pong-12-60s-64kB-baremetal
+sockperf-datasizes-ping-pong-13-60s-128kB-baremetal
+sockperf-datasizes-ping-pong-14-60s-256kB-baremetal
+sockperf-datasizes-ping-pong-15-60s-512kB-baremetal
+sockperf-datasizes-ping-pong-16-60s-1M-baremetal
+
+SUBPLOT
+
+ARG percentiles 50 90 99 99.999
+ARGS max min mean wrk
+ARG title wrk-Nginx, 30s
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+FILEDIR wrk-bench/raspi-actual/testdata
+wrk-filesizes-1-1c-1t-30s-1B-baremetal
+wrk-filesizes-2-1c-1t-30s-64B-baremetal
+wrk-filesizes-3-1c-1t-30s-512B-baremetal
+wrk-filesizes-4-1c-1t-30s-1kB-baremetal
+wrk-filesizes-5-1c-1t-30s-1472B-baremetal
+wrk-filesizes-6-1c-1t-30s-2kB-baremetal
+wrk-filesizes-7-1c-1t-30s-4kB-baremetal
+wrk-filesizes-8-1c-1t-30s-32kB-baremetal
+wrk-filesizes-9-1c-1t-30s-64kB-baremetal
+wrk-filesizes-10-1c-1t-30s-128kB-baremetal
+wrk-filesizes-11-1c-1t-30s-256kB-baremetal
+wrk-filesizes-12-1c-1t-30s-512kB-baremetal
+wrk-filesizes-13-1c-1t-30s-1M-baremetal

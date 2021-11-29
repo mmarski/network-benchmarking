@@ -1,0 +1,76 @@
+TITLE Sockperf: Throughput comparison of VMA, Freeflow, baremetal, Kubernetes
+
+FILENAME sockperf-throughput-bare-kube-VMA-Freeflow
+FILEDIR nokia-throughputdata
+COLUMNS 2
+
+ARGS sockperf throughput gbps nology
+AXES bytes,Gbps,Mmsg/s
+XAXIS 14,32,64,256,512,1k,1472,2k,4k,8k,32k,64k,128k,256k,512k,1M
+COMPARE freeflow,kube,VMA,bare
+
+FILES
+sockperf-datasizes-throughput-1-10s-14B-kube
+sockperf-datasizes-throughput-2-10s-32B-kube
+sockperf-datasizes-throughput-3-10s-64B-kube
+sockperf-datasizes-throughput-4-10s-256B-kube
+sockperf-datasizes-throughput-5-10s-512B-kube
+sockperf-datasizes-throughput-6-10s-1kB-kube
+sockperf-datasizes-throughput-7-10s-1472B-kube
+sockperf-datasizes-throughput-8-10s-2kB-kube
+sockperf-datasizes-throughput-9-10s-4kB-kube
+sockperf-datasizes-throughput-10-10s-8kB-kube
+sockperf-datasizes-throughput-11-10s-32kB-kube
+sockperf-datasizes-throughput-12-10s-64kB-kube
+sockperf-datasizes-throughput-13-10s-128kB-kube
+sockperf-datasizes-throughput-14-10s-256kB-kube
+sockperf-datasizes-throughput-15-10s-512kB-kube
+sockperf-datasizes-throughput-16-10s-1M-kube
+sockperf-datasizes-throughput-1-10s-14B-baremetal
+sockperf-datasizes-throughput-2-10s-32B-baremetal
+sockperf-datasizes-throughput-3-10s-64B-baremetal
+sockperf-datasizes-throughput-4-10s-256B-baremetal
+sockperf-datasizes-throughput-5-10s-512B-baremetal
+sockperf-datasizes-throughput-6-10s-1kB-baremetal
+sockperf-datasizes-throughput-7-10s-1472B-baremetal
+sockperf-datasizes-throughput-8-10s-2kB-baremetal
+sockperf-datasizes-throughput-9-10s-4kB-baremetal
+sockperf-datasizes-throughput-10-10s-8kB-baremetal
+sockperf-datasizes-throughput-11-10s-32kB-baremetal
+sockperf-datasizes-throughput-12-10s-64kB-baremetal
+sockperf-datasizes-throughput-13-10s-128kB-baremetal
+sockperf-datasizes-throughput-14-10s-256kB-baremetal
+sockperf-datasizes-throughput-15-10s-512kB-baremetal
+sockperf-datasizes-throughput-16-10s-1M-baremetal
+sockperf-datasizes-VMA-throughput-1-10s-14B-baremetal
+sockperf-datasizes-VMA-throughput-2-10s-32B-baremetal
+sockperf-datasizes-VMA-throughput-3-10s-64B-baremetal
+sockperf-datasizes-VMA-throughput-4-10s-256B-baremetal
+sockperf-datasizes-VMA-throughput-5-10s-512B-baremetal
+sockperf-datasizes-VMA-throughput-6-10s-1kB-baremetal
+sockperf-datasizes-VMA-throughput-7-10s-1472B-baremetal
+sockperf-datasizes-VMA-throughput-8-10s-2kB-baremetal
+sockperf-datasizes-VMA-throughput-9-10s-4kB-baremetal
+sockperf-datasizes-VMA-throughput-10-10s-8kB-baremetal
+sockperf-datasizes-VMA-throughput-11-10s-32kB-baremetal
+sockperf-datasizes-VMA-throughput-12-10s-64kB-baremetal
+sockperf-datasizes-VMA-throughput-13-10s-128kB-baremetal
+sockperf-datasizes-VMA-throughput-14-10s-256kB-baremetal
+sockperf-datasizes-VMA-throughput-15-10s-512kB-baremetal
+sockperf-datasizes-VMA-throughput-16-10s-1M-baremetal
+sockperf-datasizes-freeflow-throughput-1-10s-14B-kube
+sockperf-datasizes-freeflow-throughput-2-10s-32B-kube
+sockperf-datasizes-freeflow-throughput-3-10s-64B-kube
+sockperf-datasizes-freeflow-throughput-4-10s-256B-kube
+sockperf-datasizes-freeflow-throughput-5-10s-512B-kube
+sockperf-datasizes-freeflow-throughput-6-10s-1kB-kube
+sockperf-datasizes-freeflow-throughput-7-10s-1472B-kube
+sockperf-datasizes-freeflow-throughput-8-10s-2kB-kube
+sockperf-datasizes-freeflow-throughput-9-10s-4kB-kube
+sockperf-datasizes-freeflow-throughput-10-10s-8kB-kube
+sockperf-datasizes-freeflow-throughput-11-10s-32kB-kube
+sockperf-datasizes-freeflow-throughput-12-10s-64kB-kube
+sockperf-datasizes-freeflow-throughput-13-10s-128kB-kube
+sockperf-datasizes-freeflow-throughput-14-10s-256kB-kube
+sockperf-datasizes-freeflow-throughput-15-10s-512kB-kube
+sockperf-datasizes-freeflow-throughput-16-10s-1M-kube

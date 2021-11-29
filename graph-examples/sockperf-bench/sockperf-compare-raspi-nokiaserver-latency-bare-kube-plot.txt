@@ -1,0 +1,90 @@
+TITLE Sockperf: test setup latency comparison
+TITLE2 Airframe 180s, Raspberry Pi 60s
+
+FILENAME sockperf-compare-raspi-nokiaserver-latency-bare-kube
+COLUMNS 2
+SHAREY
+
+ARG percentiles 99
+ARGS mean floatlegend
+ARGS sockperf latency
+ARG title Baremetal
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+COMPARE nokia,raspi
+LABELS Airframe,RPi
+
+FILES
+nokia-latencydata/sockperf-datasizes-ping-pong-1-180s-14B-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-2-180s-32B-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-3-180s-64B-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-4-180s-256B-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-5-180s-512B-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-6-180s-1kB-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-7-180s-2kB-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-8-180s-4kB-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-9-180s-8kB-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-10-180s-32kB-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-11-180s-64kB-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-12-180s-128kB-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-13-180s-256kB-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-14-180s-512kB-baremetal
+nokia-latencydata/sockperf-datasizes-ping-pong-15-180s-1M-baremetal
+raspi-data/sockperf-datasizes-ping-pong-1-60s-14B-baremetal
+raspi-data/sockperf-datasizes-ping-pong-2-60s-32B-baremetal
+raspi-data/sockperf-datasizes-ping-pong-3-60s-64B-baremetal
+raspi-data/sockperf-datasizes-ping-pong-4-60s-256B-baremetal
+raspi-data/sockperf-datasizes-ping-pong-5-60s-512B-baremetal
+raspi-data/sockperf-datasizes-ping-pong-6-60s-1kB-baremetal
+raspi-data/sockperf-datasizes-ping-pong-8-60s-2kB-baremetal
+raspi-data/sockperf-datasizes-ping-pong-9-60s-4kB-baremetal
+raspi-data/sockperf-datasizes-ping-pong-10-60s-8kB-baremetal
+raspi-data/sockperf-datasizes-ping-pong-11-60s-32kB-baremetal
+raspi-data/sockperf-datasizes-ping-pong-12-60s-64kB-baremetal
+raspi-data/sockperf-datasizes-ping-pong-13-60s-128kB-baremetal
+raspi-data/sockperf-datasizes-ping-pong-14-60s-256kB-baremetal
+raspi-data/sockperf-datasizes-ping-pong-15-60s-512kB-baremetal
+raspi-data/sockperf-datasizes-ping-pong-16-60s-1M-baremetal
+
+SUBPLOT
+
+ARG percentiles 99
+ARGS mean floatlegend
+ARGS sockperf latency
+ARG title Flannel host-gw
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+COMPARE nokia,raspi
+LABELS Airframe,RPi
+
+FILES
+nokia-latencydata/sockperf-datasizes-ping-pong-1-180s-14B-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-2-180s-32B-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-3-180s-64B-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-4-180s-256B-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-5-180s-512B-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-6-180s-1kB-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-7-180s-2kB-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-8-180s-4kB-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-9-180s-8kB-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-10-180s-32kB-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-11-180s-64kB-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-12-180s-128kB-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-13-180s-256kB-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-14-180s-512kB-kube
+nokia-latencydata/sockperf-datasizes-ping-pong-15-180s-1M-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-1-60s-14B-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-2-60s-32B-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-3-60s-64B-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-4-60s-256B-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-5-60s-512B-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-6-60s-1kB-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-8-60s-2kB-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-9-60s-4kB-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-10-60s-8kB-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-11-60s-32kB-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-12-60s-64kB-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-13-60s-128kB-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-14-60s-256kB-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-15-60s-512kB-kube
+raspi-data/sockperf-datasizes-hostgw-ping-pong-16-60s-1M-kube

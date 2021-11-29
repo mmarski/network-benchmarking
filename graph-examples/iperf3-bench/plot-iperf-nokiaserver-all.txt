@@ -1,0 +1,16 @@
+TITLE iperf3 throughput over 10 seconds comparison
+FILENAME iperf3-throughput-nokiaserver-nonlocal
+FILEDIR nokiaserver
+
+ARGS iperf gbps
+AXES s,Gbit/s
+LABELS bare,Kubernetes,Freeflow,VMA,VMA-hugepages,VMA-hu-client,VMA-hu-server
+
+FILES
+iperf-baremetal-json.txt
+iperf-kubernetes-json.txt
+iperf-kubernetes-freeflow-json.txt
+iperf-baremetal-VMA-json.txt
+iperf-baremetal-VMA-hugepages-json.txt
+iperf-baremetal-VMA-hugepages-clientonly-json.txt
+iperf-baremetal-VMA-hugepages-serveronly-json.txt

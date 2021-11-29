@@ -1,0 +1,26 @@
+Running 1m test @ http://localhost:90/1472B.bin
+  1 threads and 1 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    86.44us   20.04us   3.02ms   98.80%
+    Req/Sec     0.87k     4.06     0.88k    84.33%
+  52010 requests in 1.00m, 85.61MB read
+Requests/sec:    866.28
+Transfer/sec:      1.43MB
+LATENCY
+MAX,3020
+MIN,69
+MEAN,86.437369018092
+STDEV,20.042497019654
+50%,85
+90%,90
+99%,110
+99.999%,3020
+SUMMARY
+DURATION,60038668
+REQUESTS,52010
+BYTES,89769000
+CONNERR,0
+READERR,0
+WRITERR,0
+STATERR,0
+TIMEOUT,0

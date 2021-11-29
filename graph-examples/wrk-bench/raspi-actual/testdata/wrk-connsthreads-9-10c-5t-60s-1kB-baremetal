@@ -1,0 +1,26 @@
+Running 1m test @ http://192.168.1.113:90/1kB.bin
+  5 threads and 10 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     5.19ms   37.05ms 637.15ms   98.06%
+    Req/Sec     3.49k   571.83     4.63k    78.38%
+  1026853 requests in 1.00m, 1.23GB read
+Requests/sec:  17106.31
+Transfer/sec:     21.00MB
+LATENCY
+MAX,637152
+MIN,295
+MEAN,5191.8643458645
+STDEV,37050.305267346
+50%,462
+90%,1010
+99%,203197
+99.999%,633870
+SUMMARY
+DURATION,60027730
+REQUESTS,1026853
+BYTES,1321508491
+CONNERR,0
+READERR,0
+WRITERR,0
+STATERR,0
+TIMEOUT,0

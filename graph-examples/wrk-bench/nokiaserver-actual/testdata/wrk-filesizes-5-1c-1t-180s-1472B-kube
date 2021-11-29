@@ -1,0 +1,26 @@
+Running 3m test @ http://nginx-service:100/1472B.bin
+  1 threads and 1 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   143.40us   32.96us   1.62ms   73.42%
+    Req/Sec     6.84k     0.86k   10.47k    67.35%
+  1226035 requests in 3.00m, 1.97GB read
+Requests/sec:   6807.54
+Transfer/sec:     11.21MB
+LATENCY
+MAX,1618
+MIN,65
+MEAN,143.40190669823
+STDEV,32.956084970734
+50%,143
+90%,179
+99%,260
+99.999%,885
+SUMMARY
+DURATION,180099442
+REQUESTS,1226035
+BYTES,2116130280
+CONNERR,0
+READERR,0
+WRITERR,0
+STATERR,0
+TIMEOUT,0

@@ -1,0 +1,47 @@
+TITLE Sockperf latency comparison of Flannel and bare metal, Raspberry Pi
+
+FILENAME sockperf-raspi-lat-bare-flannel
+FILEDIR raspi-data
+COLUMNS 2
+
+ARG percentiles 99.999
+ARGS max mean
+ARGS sockperf latency floatlegend
+AXES bytes,ms
+XAXIS 14,32,64,256,512,1k,1472,2k,4k,8k,32k,64k,128k,256k,512k,1M
+COMPARE bare,kube
+LABELS bare,Flannel
+
+FILES
+sockperf-datasizes-ping-pong-1-60s-14B-baremetal
+sockperf-datasizes-ping-pong-2-60s-32B-baremetal
+sockperf-datasizes-ping-pong-3-60s-64B-baremetal
+sockperf-datasizes-ping-pong-4-60s-256B-baremetal
+sockperf-datasizes-ping-pong-5-60s-512B-baremetal
+sockperf-datasizes-ping-pong-6-60s-1kB-baremetal
+sockperf-datasizes-ping-pong-7-60s-1472B-baremetal
+sockperf-datasizes-ping-pong-8-60s-2kB-baremetal
+sockperf-datasizes-ping-pong-9-60s-4kB-baremetal
+sockperf-datasizes-ping-pong-10-60s-8kB-baremetal
+sockperf-datasizes-ping-pong-11-60s-32kB-baremetal
+sockperf-datasizes-ping-pong-12-60s-64kB-baremetal
+sockperf-datasizes-ping-pong-13-60s-128kB-baremetal
+sockperf-datasizes-ping-pong-14-60s-256kB-baremetal
+sockperf-datasizes-ping-pong-15-60s-512kB-baremetal
+sockperf-datasizes-ping-pong-16-60s-1M-baremetal
+sockperf-datasizes-hostgw-ping-pong-1-60s-14B-kube
+sockperf-datasizes-hostgw-ping-pong-2-60s-32B-kube
+sockperf-datasizes-hostgw-ping-pong-3-60s-64B-kube
+sockperf-datasizes-hostgw-ping-pong-4-60s-256B-kube
+sockperf-datasizes-hostgw-ping-pong-5-60s-512B-kube
+sockperf-datasizes-hostgw-ping-pong-6-60s-1kB-kube
+sockperf-datasizes-hostgw-ping-pong-7-60s-1472B-kube
+sockperf-datasizes-hostgw-ping-pong-8-60s-2kB-kube
+sockperf-datasizes-hostgw-ping-pong-9-60s-4kB-kube
+sockperf-datasizes-hostgw-ping-pong-10-60s-8kB-kube
+sockperf-datasizes-hostgw-ping-pong-11-60s-32kB-kube
+sockperf-datasizes-hostgw-ping-pong-12-60s-64kB-kube
+sockperf-datasizes-hostgw-ping-pong-13-60s-128kB-kube
+sockperf-datasizes-hostgw-ping-pong-14-60s-256kB-kube
+sockperf-datasizes-hostgw-ping-pong-15-60s-512kB-kube
+sockperf-datasizes-hostgw-ping-pong-16-60s-1M-kube

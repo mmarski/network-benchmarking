@@ -1,0 +1,84 @@
+TITLE Sockperf test setup comparison on CPU usage
+
+FILENAME sockperf-compare-raspi-nokiaserver-CPU-bare-kube
+FILEDIR nokia-latencydata
+COLUMNS 2
+
+ARG cpu-mean user kernel sw-int
+ARG title AirFrame Baremetal
+AXES bytes,%
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+CPUFILES
+sockperf-datasizes-ping-pong-1-180s-14B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-1-180s-14B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-2-180s-32B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-2-180s-32B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-3-180s-64B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-3-180s-64B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-4-180s-256B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-4-180s-256B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-5-180s-512B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-5-180s-512B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-6-180s-1kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-6-180s-1kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-7-180s-2kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-7-180s-2kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-8-180s-4kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-8-180s-4kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-9-180s-8kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-9-180s-8kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-10-180s-32kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-10-180s-32kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-11-180s-64kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-11-180s-64kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-12-180s-128kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-12-180s-128kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-13-180s-256kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-13-180s-256kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-14-180s-512kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-14-180s-512kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-15-180s-1M-baremetal-CPU-client
+sockperf-datasizes-ping-pong-15-180s-1M-baremetal-CPU-server
+
+
+SUBPLOT
+ARG cpu-mean user kernel sw-int
+ARG title Raspberry Pi Baremetal
+AXES bytes,%
+XAXIS 14,32,64,256,512,1k,1472,2k,4k,8k,32k,64k,128k,256k,512k,1M
+
+CPUFILES
+FILEDIR raspi-data
+sockperf-datasizes-ping-pong-1-60s-14B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-1-60s-14B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-2-60s-32B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-2-60s-32B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-3-60s-64B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-3-60s-64B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-4-60s-256B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-4-60s-256B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-5-60s-512B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-5-60s-512B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-6-60s-1kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-6-60s-1kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-7-60s-1472B-baremetal-CPU-server
+sockperf-datasizes-ping-pong-7-60s-1472B-baremetal-CPU-client
+sockperf-datasizes-ping-pong-8-60s-2kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-8-60s-2kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-9-60s-4kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-9-60s-4kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-10-60s-8kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-10-60s-8kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-11-60s-32kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-11-60s-32kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-12-60s-64kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-12-60s-64kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-13-60s-128kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-13-60s-128kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-14-60s-256kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-14-60s-256kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-15-60s-512kB-baremetal-CPU-server
+sockperf-datasizes-ping-pong-15-60s-512kB-baremetal-CPU-client
+sockperf-datasizes-ping-pong-16-60s-1M-baremetal-CPU-server
+sockperf-datasizes-ping-pong-16-60s-1M-baremetal-CPU-client

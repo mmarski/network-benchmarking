@@ -1,0 +1,12 @@
+TITLE Infiniband client latency mean comparison
+
+ARGS ib latency mean max us
+
+FILENAME ib-latency-means
+AXES bytes,us
+LABELS send,write,read
+
+FILES
+ib_send_lat -a client.txt
+ib_write_lat -a client.txt
+ib_read_lat -a clientonly.txt

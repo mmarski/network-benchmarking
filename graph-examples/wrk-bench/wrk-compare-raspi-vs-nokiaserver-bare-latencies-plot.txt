@@ -1,0 +1,90 @@
+TITLE wrk-Nginx latencies bare-metal test setup comparison 
+TITLE2 1 connection, 1 thread
+
+FILENAME wrk-compare-raspi-vs-nokiaserver-bare-latencies
+COLUMNS 1
+FILEDIR nokiaserver-actual/testdata
+
+ARG percentiles 50 90 99
+ARGS min mean wrk
+ARG title Nokia AirFrame setup, 180s run
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+wrk-filesizes-sendfileon-1-1c-1t-180s-1B-baremetal
+wrk-filesizes-sendfileon-2-1c-1t-180s-64B-baremetal
+wrk-filesizes-sendfileon-3-1c-1t-180s-512B-baremetal
+wrk-filesizes-sendfileon-4-1c-1t-180s-1kB-baremetal
+wrk-filesizes-sendfileon-5-1c-1t-180s-1472B-baremetal
+wrk-filesizes-sendfileon-6-1c-1t-180s-2kB-baremetal
+wrk-filesizes-sendfileon-7-1c-1t-180s-4kB-baremetal
+wrk-filesizes-sendfileon-8-1c-1t-180s-32kB-baremetal
+wrk-filesizes-sendfileon-9-1c-1t-180s-64kB-baremetal
+wrk-filesizes-sendfileon-10-1c-1t-180s-128kB-baremetal
+wrk-filesizes-sendfileon-11-1c-1t-180s-256kB-baremetal
+wrk-filesizes-sendfileon-12-1c-1t-180s-512kB-baremetal
+wrk-filesizes-sendfileon-13-1c-1t-180s-1M-baremetal
+
+SUBPLOT
+
+ARG percentiles 50 90 99
+ARGS min mean wrk
+ARG title Raspberry Pi setup, 30s run
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+FILEDIR raspi-actual/testdata
+wrk-filesizes-1-1c-1t-30s-1B-baremetal
+wrk-filesizes-2-1c-1t-30s-64B-baremetal
+wrk-filesizes-3-1c-1t-30s-512B-baremetal
+wrk-filesizes-4-1c-1t-30s-1kB-baremetal
+wrk-filesizes-5-1c-1t-30s-1472B-baremetal
+wrk-filesizes-6-1c-1t-30s-2kB-baremetal
+wrk-filesizes-7-1c-1t-30s-4kB-baremetal
+wrk-filesizes-8-1c-1t-30s-32kB-baremetal
+wrk-filesizes-9-1c-1t-30s-64kB-baremetal
+wrk-filesizes-10-1c-1t-30s-128kB-baremetal
+wrk-filesizes-11-1c-1t-30s-256kB-baremetal
+wrk-filesizes-12-1c-1t-30s-512kB-baremetal
+wrk-filesizes-13-1c-1t-30s-1M-baremetal
+
+SUBPLOT
+
+ARG percentiles 99
+ARGS mean wrk
+ARG title Raspberry Pi vs AirFrame
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+COMPARE raspi,nokiaserver
+LABELS RPi,AirFrame
+
+FILES
+FILEDIR .
+raspi-actual/testdata/wrk-filesizes-1-1c-1t-30s-1B-baremetal
+raspi-actual/testdata/wrk-filesizes-2-1c-1t-30s-64B-baremetal
+raspi-actual/testdata/wrk-filesizes-3-1c-1t-30s-512B-baremetal
+raspi-actual/testdata/wrk-filesizes-4-1c-1t-30s-1kB-baremetal
+raspi-actual/testdata/wrk-filesizes-5-1c-1t-30s-1472B-baremetal
+raspi-actual/testdata/wrk-filesizes-6-1c-1t-30s-2kB-baremetal
+raspi-actual/testdata/wrk-filesizes-7-1c-1t-30s-4kB-baremetal
+raspi-actual/testdata/wrk-filesizes-8-1c-1t-30s-32kB-baremetal
+raspi-actual/testdata/wrk-filesizes-9-1c-1t-30s-64kB-baremetal
+raspi-actual/testdata/wrk-filesizes-10-1c-1t-30s-128kB-baremetal
+raspi-actual/testdata/wrk-filesizes-11-1c-1t-30s-256kB-baremetal
+raspi-actual/testdata/wrk-filesizes-12-1c-1t-30s-512kB-baremetal
+raspi-actual/testdata/wrk-filesizes-13-1c-1t-30s-1M-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-1-1c-1t-180s-1B-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-2-1c-1t-180s-64B-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-3-1c-1t-180s-512B-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-4-1c-1t-180s-1kB-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-5-1c-1t-180s-1472B-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-6-1c-1t-180s-2kB-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-7-1c-1t-180s-4kB-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-8-1c-1t-180s-32kB-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-9-1c-1t-180s-64kB-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-10-1c-1t-180s-128kB-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-11-1c-1t-180s-256kB-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-12-1c-1t-180s-512kB-baremetal
+nokiaserver-actual/testdata/wrk-filesizes-sendfileon-13-1c-1t-180s-1M-baremetal

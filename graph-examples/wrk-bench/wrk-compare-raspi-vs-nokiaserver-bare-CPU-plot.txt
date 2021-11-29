@@ -1,0 +1,47 @@
+TITLE wrk-Nginx bare metal CPU usage test setup comparison 
+TITLE2 1 connection, 1 thread, 180 second run, 1kB transfer
+
+FILENAME wrk-compare-raspi-vs-nokiaserver-bare-CPU
+COLUMNS 2
+
+ARG cpu
+ARGS nology
+ARG title Raspberry Pi client (wrk)
+AXES seconds,%
+
+CPUFILES
+FILEDIR raspi-actual/testdata
+wrk-filesizes-4-1c-1t-180s-1kB-baremetal-CPU-client
+
+SUBPLOT
+
+ARG cpu
+ARGS nology
+ARG title Raspberry Pi server (Nginx)
+AXES seconds,%
+
+CPUFILES
+FILEDIR raspi-actual/testdata
+wrk-filesizes-4-1c-1t-180s-1kB-baremetal-CPU-server
+
+SUBPLOT
+
+ARG cpu
+ARGS nology
+ARG title AirFrame client (wrk)
+AXES seconds,%
+
+CPUFILES
+FILEDIR nokiaserver-actual/testdata
+wrk-filesizes-sendfileon-4-1c-1t-180s-1kB-baremetal-CPU-client
+
+SUBPLOT
+
+ARG cpu
+ARGS nology
+ARG title AirFrame server (Nginx)
+AXES seconds,%
+
+CPUFILES
+FILEDIR nokiaserver-actual/testdata
+wrk-filesizes-sendfileon-4-1c-1t-180s-1kB-baremetal-CPU-server

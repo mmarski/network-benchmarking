@@ -1,0 +1,12 @@
+sockperf: [2;35m== version #3.6-no.git == [0m
+sockperf[CLIENT] send on:
+[ 0] IP = 192.168.1.113   PORT = 11111 # TCP
+sockperf: Warmup stage (sending a few dummy messages)...
+sockperf: Starting test...
+sockperf: Test end (interrupted by timer)
+sockperf: Test ended
+sockperf: Total of 1035 messages sent in 10.001 sec
+
+sockperf: [2;35mNOTE: test was performed, using msg-size=1048575. For getting maximum throughput consider using --msg-size=1472[0m
+sockperf: Summary: Message Rate is 103 [msg/sec], Packet Rate is about 73439 [pkt/sec] (713 ip frags / msg)
+sockperf: Summary: BandWidth is 103.000 MBps (823.999 Mbps)

@@ -1,0 +1,25 @@
+sockperf: [2;35m== version #3.7-no.git == [0m
+sockperf[CLIENT] send on:sockperf: using recvfrom() to block on socket(s)
+
+[ 0] IP = 10.37.215.10    PORT = 11111 # TCP
+sockperf: Warmup stage (sending a few dummy messages)...
+sockperf: Starting test...
+sockperf: Test end (interrupted by timer)
+sockperf: Test ended
+sockperf: [Total Run] RunTime=179.999 sec; Warm up time=400 msec; SentMessages=28604428; ReceivedMessages=28604427
+sockperf: ========= Printing statistics for Server No: 0
+sockperf: [Valid Duration] RunTime=179.549 sec; SentMessages=28542351; ReceivedMessages=28542351
+sockperf: [2;35m====> avg-latency=3.132 (std-dev=0.574)[0m
+sockperf: # dropped messages = 0; # duplicated messages = 0; # out-of-order messages = 0
+sockperf: Summary: Latency is 3.132 usec
+sockperf: [2;35mTotal 28542351 observations[0m; each percentile contains 285423.51 observations
+sockperf: ---> <MAX> observation = 1442.566
+sockperf: ---> percentile 99.999 =   71.994
+sockperf: ---> percentile 99.990 =   11.343
+sockperf: ---> percentile 99.900 =    8.411
+sockperf: ---> percentile 99.000 =    3.876
+sockperf: ---> percentile 90.000 =    3.380
+sockperf: ---> percentile 75.000 =    3.235
+sockperf: ---> percentile 50.000 =    3.099
+sockperf: ---> percentile 25.000 =    2.982
+sockperf: ---> <MIN> observation =    2.599

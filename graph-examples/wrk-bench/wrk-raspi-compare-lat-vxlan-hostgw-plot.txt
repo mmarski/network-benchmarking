@@ -1,0 +1,49 @@
+TITLE wrk-Nginx Flannel backend latency comparison on Raspberry Pi setup
+TITLE2 180 seconds, 1 connection, 1 thread
+
+FILENAME wrk-raspi-compare-lat-vxlan-hostgw
+COLUMNS 2
+FILEDIR raspi-actual/testdata
+SHAREY
+
+ARG percentiles 50 90 99 99.999
+ARGS min max mean wrk
+ARG title Flannel host-gw
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,1472B,2kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+wrk-filesizes-hostgw-1-1c-1t-180s-1B-kube
+wrk-filesizes-hostgw-2-1c-1t-180s-64B-kube
+wrk-filesizes-hostgw-3-1c-1t-180s-512B-kube
+wrk-filesizes-hostgw-4-1c-1t-180s-1kB-kube
+wrk-filesizes-hostgw-5-1c-1t-180s-1472B-kube
+wrk-filesizes-hostgw-6-1c-1t-180s-2kB-kube
+wrk-filesizes-hostgw-7-1c-1t-180s-4kB-kube
+wrk-filesizes-hostgw-8-1c-1t-180s-32kB-kube
+wrk-filesizes-hostgw-9-1c-1t-180s-64kB-kube
+wrk-filesizes-hostgw-10-1c-1t-180s-128kB-kube
+wrk-filesizes-hostgw-11-1c-1t-180s-256kB-kube
+wrk-filesizes-hostgw-12-1c-1t-180s-512kB-kube
+wrk-filesizes-hostgw-13-1c-1t-180s-1M-kube
+
+SUBPLOT
+ARG percentiles 50 90 99 99.999
+ARGS min max mean wrk
+ARG title Flannel VXLAN
+AXES Filesize,ms
+XAXIS 1B,64B,512B,1kB,4kB,32kB,64kB,128kB,256kB,512kB,1MB
+
+FILES
+FILEDIR 1-connection/raspi/kubernetes/testdata
+wrk-filesizes-1c-1t-180s-1B-1
+wrk-filesizes-1c-1t-180s-64B-2
+wrk-filesizes-1c-1t-180s-512B-3
+wrk-filesizes-1c-1t-180s-1kB-4
+wrk-filesizes-1c-1t-180s-4kB-5
+wrk-filesizes-1c-1t-180s-32kB-6
+wrk-filesizes-1c-1t-180s-64kB-7
+wrk-filesizes-1c-1t-180s-128kB-8
+wrk-filesizes-1c-1t-180s-256kB-9
+wrk-filesizes-1c-1t-180s-512kB-10
+wrk-filesizes-1c-1t-180s-1M-11

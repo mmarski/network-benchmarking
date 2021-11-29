@@ -1,0 +1,43 @@
+TITLE Sockperf: latency of bare metal and VMA
+
+FILENAME sockperf-lat-bare-vs-VMA
+FILEDIR latencydata
+COLUMNS 2
+
+ARG percentiles 99
+ARGS sockperf mean latency us
+AXES bytes,us
+XAXIS 14,32,64,256,512,1k,2k,4k,8k,32k,64k,128k,256k,512k,1M
+COMPARE VMA,bare
+
+FILES
+sockperf-datasizes-VMA-hugepages-ping-pong-1-180s-14B-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-2-180s-32B-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-3-180s-64B-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-4-180s-256B-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-5-180s-512B-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-6-180s-1kB-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-8-180s-2kB-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-9-180s-4kB-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-10-180s-8kB-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-11-180s-32kB-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-12-180s-64kB-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-13-180s-128kB-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-14-180s-256kB-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-15-180s-512kB-baremetal
+sockperf-datasizes-VMA-hugepages-ping-pong-16-180s-1M-baremetal
+sockperf-datasizes-ping-pong-1-180s-14B-baremetal
+sockperf-datasizes-ping-pong-2-180s-32B-baremetal
+sockperf-datasizes-ping-pong-3-180s-64B-baremetal
+sockperf-datasizes-ping-pong-4-180s-256B-baremetal
+sockperf-datasizes-ping-pong-5-180s-512B-baremetal
+sockperf-datasizes-ping-pong-6-180s-1kB-baremetal
+sockperf-datasizes-ping-pong-7-180s-2kB-baremetal
+sockperf-datasizes-ping-pong-8-180s-4kB-baremetal
+sockperf-datasizes-ping-pong-9-180s-8kB-baremetal
+sockperf-datasizes-ping-pong-10-180s-32kB-baremetal
+sockperf-datasizes-ping-pong-11-180s-64kB-baremetal
+sockperf-datasizes-ping-pong-12-180s-128kB-baremetal
+sockperf-datasizes-ping-pong-13-180s-256kB-baremetal
+sockperf-datasizes-ping-pong-14-180s-512kB-baremetal
+sockperf-datasizes-ping-pong-15-180s-1M-baremetal

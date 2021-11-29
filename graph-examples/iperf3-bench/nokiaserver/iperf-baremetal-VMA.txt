@@ -1,0 +1,41 @@
+LD_PRELOAD=libvma.so iperf3 --client 10.37.215.10
+ VMA INFO: ---------------------------------------------------------------------------
+ VMA INFO: VMA_VERSION: 9.2.2-1 Release built on Mar 29 2021 12:43:44
+ VMA INFO: Cmd Line: iperf3 --client 10.37.215.10
+ VMA INFO: OFED Version: MLNX_OFED_LINUX-5.3-1.0.0.1:
+ VMA INFO: ---------------------------------------------------------------------------
+ VMA INFO: Log Level                      INFO                       [VMA_TRACELEVEL]
+ VMA INFO: ---------------------------------------------------------------------------
+ VMA WARNING: **************************************************************
+ VMA WARNING: * NO IMMEDIATE ACTION NEEDED!
+ VMA WARNING: * Not enough hugepage resources for VMA memory allocation.
+ VMA WARNING: * VMA will continue working with regular memory allocation.
+ VMA INFO:    * Optional:
+ VMA INFO:    *   1. Switch to a different memory allocation type
+ VMA INFO:    *      (VMA_MEM_ALLOC_TYPE!= 2)
+ VMA INFO:    *   2. Restart process after increasing the number of
+ VMA INFO:    *      hugepages resources in the system:
+ VMA INFO:    *      "echo 1000000000 > /proc/sys/kernel/shmmax"
+ VMA INFO:    *      "echo 800 > /proc/sys/vm/nr_hugepages"
+ VMA WARNING: * Please refer to the memory allocation section in the VMA's
+ VMA WARNING: * User Manual for more information
+ VMA WARNING: **************************************************************
+Connecting to host 10.37.215.10, port 5201
+[ 27] local 10.37.215.9 port 37355 connected to 10.37.215.10 port 5201
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[ 27]   0.00-1.00   sec   892 MBytes  7.48 Gbits/sec    0   5.23 KBytes
+[ 27]   1.00-2.00   sec  1.03 GBytes  8.82 Gbits/sec    0   5.23 KBytes
+[ 27]   2.00-3.00   sec  1.04 GBytes  8.90 Gbits/sec    0   5.23 KBytes
+[ 27]   3.00-4.00   sec   991 MBytes  8.32 Gbits/sec    0   5.23 KBytes
+[ 27]   4.00-5.00   sec  1.03 GBytes  8.81 Gbits/sec    0   5.23 KBytes
+[ 27]   5.00-6.00   sec  1.02 GBytes  8.80 Gbits/sec    0   5.23 KBytes
+[ 27]   6.00-7.00   sec  1.02 GBytes  8.80 Gbits/sec    0   5.23 KBytes
+[ 27]   7.00-8.00   sec  1.03 GBytes  8.88 Gbits/sec    0   5.23 KBytes
+[ 27]   8.00-9.00   sec  1.04 GBytes  8.95 Gbits/sec    0   5.23 KBytes
+[ 27]   9.00-10.00  sec  1.04 GBytes  8.95 Gbits/sec    0   5.23 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[ 27]   0.00-10.00  sec  10.1 GBytes  8.67 Gbits/sec    0             sender
+[ 27]   0.00-10.00  sec  10.1 GBytes  8.67 Gbits/sec                  receiver
+
+iperf Done.

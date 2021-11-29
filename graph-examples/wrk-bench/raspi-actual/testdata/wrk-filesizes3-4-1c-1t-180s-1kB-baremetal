@@ -1,0 +1,26 @@
+Running 3m test @ http://192.168.1.113:90/1kB.bin
+  1 threads and 1 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.91ms    9.06ms 311.56ms   99.66%
+    Req/Sec     2.06k   100.86     2.45k    93.43%
+  369226 requests in 3.00m, 453.16MB read
+Requests/sec:   2051.13
+Transfer/sec:      2.52MB
+LATENCY
+MAX,311559
+MIN,323
+MEAN,909.30422676169
+STDEV,9063.2420395262
+50%,453
+90%,502
+99%,730
+99.999%,310098
+SUMMARY
+DURATION,180010760
+REQUESTS,369226
+BYTES,475175402
+CONNERR,0
+READERR,0
+WRITERR,0
+STATERR,0
+TIMEOUT,0

@@ -1,0 +1,11 @@
+TITLE Infiniband client throughput comparison
+
+ARGS ib throughput gbps nology
+FILENAME ib-tp-comparison
+AXES bytes,Gbps,Mpps
+LABELS read,send,write
+
+FILES
+ib_read_bw -d mlx5_0 -a client.txt
+ib_send_bw -d mlx5_0 -a client.txt
+ib_write_bw -d mlx5_0 -a client.txt

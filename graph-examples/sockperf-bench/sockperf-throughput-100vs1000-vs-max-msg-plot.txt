@@ -1,0 +1,44 @@
+TITLE Sockperf: Throughput on different message rates
+TITLE2 bare metal
+
+FILENAME sockperf-throughput-100vs1000-vs-max-msg
+FILEDIR throughputdata
+
+ARGS sockperf throughput
+AXES bytes,Mbps,msg/sec
+XAXIS 14,32,64,256,512,1k,1472,2k,4k,8k,32k,64k,128k,256k,512k,1M
+COMPARE 100mps,1000mps
+
+FILES
+sockperf-datasizes-1000mps-throughput-1-10s-14B-baremetal
+sockperf-datasizes-1000mps-throughput-2-10s-32B-baremetal
+sockperf-datasizes-1000mps-throughput-3-10s-64B-baremetal
+sockperf-datasizes-1000mps-throughput-4-10s-256B-baremetal
+sockperf-datasizes-1000mps-throughput-5-10s-512B-baremetal
+sockperf-datasizes-1000mps-throughput-6-10s-1kB-baremetal
+sockperf-datasizes-1000mps-throughput-7-10s-1472B-baremetal
+sockperf-datasizes-1000mps-throughput-8-10s-2kB-baremetal
+sockperf-datasizes-1000mps-throughput-9-10s-4kB-baremetal
+sockperf-datasizes-1000mps-throughput-10-10s-8kB-baremetal
+sockperf-datasizes-1000mps-throughput-11-10s-32kB-baremetal
+sockperf-datasizes-1000mps-throughput-12-10s-64kB-baremetal
+sockperf-datasizes-1000mps-throughput-13-10s-128kB-baremetal
+sockperf-datasizes-1000mps-throughput-14-10s-256kB-baremetal
+sockperf-datasizes-1000mps-throughput-15-10s-512kB-baremetal
+sockperf-datasizes-1000mps-throughput-16-10s-1M-baremetal
+sockperf-datasizes-100mps-throughput-1-10s-14B-baremetal
+sockperf-datasizes-100mps-throughput-2-10s-32B-baremetal
+sockperf-datasizes-100mps-throughput-3-10s-64B-baremetal
+sockperf-datasizes-100mps-throughput-4-10s-256B-baremetal
+sockperf-datasizes-100mps-throughput-5-10s-512B-baremetal
+sockperf-datasizes-100mps-throughput-6-10s-1kB-baremetal
+sockperf-datasizes-100mps-throughput-7-10s-1472B-baremetal
+sockperf-datasizes-100mps-throughput-8-10s-2kB-baremetal
+sockperf-datasizes-100mps-throughput-9-10s-4kB-baremetal
+sockperf-datasizes-100mps-throughput-10-10s-8kB-baremetal
+sockperf-datasizes-100mps-throughput-11-10s-32kB-baremetal
+sockperf-datasizes-100mps-throughput-12-10s-64kB-baremetal
+sockperf-datasizes-100mps-throughput-13-10s-128kB-baremetal
+sockperf-datasizes-100mps-throughput-14-10s-256kB-baremetal
+sockperf-datasizes-100mps-throughput-15-10s-512kB-baremetal
+sockperf-datasizes-100mps-throughput-16-10s-1M-baremetal
