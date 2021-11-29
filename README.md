@@ -9,6 +9,8 @@ The amount of loops should match the arrays used, for example wrk file list of s
 Use parameter -p to give unique prefix for the output files.
 
 Possible parameters:
+
+```
     -s | --sockperf) SOCKPERF="$2" ;;
     -r | --sockperfrun) SOCKPERF_RUN="$2" ;;
     -i | --iperf) IPERF="$2" ;;
@@ -27,7 +29,7 @@ Possible parameters:
     --dataarr) USE_DATAARR="$2" ;;
     --connarr) USE_CONNARR="$2" ;;
     --threadarr) USE_THREADARR="$2" ;;
-
+```
 
 
 # Python Plotter script for results
@@ -44,12 +46,15 @@ See the examples for demonstration. Function parse_graph_options has all the pos
 There are multiple possible parameters, some given in a different way than others, categorized here.
 
 ### Keyword and one argument
+```
 TITLE <title>, TITLE2 <title second row> - Global title for the graph
 FILENAME <output file name>
 FILEDIR <directory> - has to be given at the start of the file to determine a directory where stat files are located, default current directory. Can be given again after FILES or CPUFILES keywords, to change the directory for a graph and all subsequent graphs until another FILEDIR keyword.
 COLUMNS <column amount> - How many graphs are drawn in one row
+```
 
 ### The ARG keyword
+```
 ARG <argument> <options>
 Single plot argument with specific options. Possible arguments:
 title <title> - Set a title for the specific plot
@@ -57,26 +62,34 @@ cpu <optional space separated params> - for CPU data parsing (from top tool), pl
 cpu-mean <optional space separated params> - for CPU data parsing (from top tool), plot mean CPU usages
 CPU parameters are space separated, for example: "cpu-mean user kernel sw-int" plots the corresponding CPU information.
 percentile <space separated percentile list> - for example "percentile 50 90 99 99.999" gives the corresponding percentile graphs. Don't use %, it is added in script.
+```
 
 ### Required file lists
 
 Either FILES or CPUFILES
+
 Give a list of files to read on the next rows
 
 ### Space separated options
+```
 ARGS <space separated single word arguments>
+```
+
+Examples: sockperf - Parse sockperf information, nology - no logaritmic y axis, floatlegend - legend inside graph instead of on the side, us - microsecond usage, gbps - gigabytes per second usage
 
 ### Comma separated options
+```
 AXES - give the units for axes
 XAXIS - x axis values
 LABELS - Graph labels, use with COMPARE to give custom labels instead of the COMPARE keywords
 COMPARE - Use keywords in file names to create a graph per those files and compare to a graph of other group of files: e.g. bare vs kube
 ANNOTATE - Use label names to annotate only specific graphs
-
+```
 
 
 ### Single keyword options
 SHAREY - share the Y axis between all plots
+
 SUBPLOT - determines the start of another plot, give the graph options after normally
 
 
