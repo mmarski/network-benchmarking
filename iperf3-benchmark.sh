@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Also zero-copy mode? -Z .. how it works, uses sendfile() method, instead of write()? miten sendfile toimii
+# Also zero-copy mode? -Z .. uses sendfile() method, instead of write()?
 TIME=30
 BYTES=1
 
