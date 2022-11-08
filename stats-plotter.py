@@ -876,11 +876,11 @@ def main():
         return 1
       # Logaritmic y axis in most cases
       if not "nology" in graph["ARGS"] and not "cpu-mean" in graph["ARGS"]:# and not "netpipe" in graph["ARGS"]:
-        axes[ri][ci].set_yscale("log", nonpositive="clip") # Nonpositive to help larger stdev than mean to show, maybe not needed
+        axes[ri][ci].set_yscale("log") #, nonpositive="clip") # Nonpositive to help larger stdev than mean to show, maybe not needed
       # Logarithmic x axis for the tests that have data points per byte sizes
       if not "nologx" in graph["ARGS"] and len(list(set(["ib", "netpipe"]) & set(graph["ARGS"]))) > 0:
         print("Netpipe and IB perftest uses log xaxis, Disable with 'nologx' arg")
-        axes[ri][ci].set_xscale("log", nonpositive="clip")
+        axes[ri][ci].set_xscale("log") #, nonpositive="clip")
       if "AXTITLE" in graph:
         axes[ri][ci].set_title(graph["AXTITLE"])
 
