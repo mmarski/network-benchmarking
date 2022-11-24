@@ -166,6 +166,22 @@ def parse_files(graph_options, stats_dict):
       # If another directory specified. This directory is then used for all future files until specified again
       if "FILEDIR" in graphopt:
         filedir = graphopt["FILEDIR"] + "/"
+      # Search for matching stat files if this option is used
+      for m in graphopt["FILEMATCH"]:
+        matches = m[0].split(" ")
+        unmatches = []
+        if m[1] is not None:
+          unmatches = m[1].split(" ")
+        print("Finding matching stat files")
+        files = os.listdir("./" + filedir)#.sort()
+        print("Found files:")
+        for f in files:
+          if any(unmatch in f for unmatch in unmatches):
+            continue
+          if all(match in f for match in matches):
+            print(f)
+            graphopt["STATFILES"].append(f)
+          
       for f in graphopt["STATFILES"]:#list(files):
         with open("./" + filedir + f, "r") as statfile:
           # Now parse the files based on the keyword in their file name
@@ -224,6 +240,7 @@ def parse_graph_options(file):
   cur_col = 0 # This is changed back to 1 when we have parsed ==columns when keyword SUBPLOT comes.
   cur_row = 0 # We need this for indexing
 
+  return_dict["SUBPLOTS"][0][0]["FILEMATCH"] = []
   return_dict["SUBPLOTS"][0][0]["STATFILES"] = []
   return_dict["SUBPLOTS"][0][0]["CPUFILES"] = []
   return_dict["SUBPLOTS"][0][0]["ARGS"] = []
@@ -296,6 +313,7 @@ def parse_graph_options(file):
             cur_col = 0
             cur_row += 1
             return_dict["SUBPLOTS"].append([{}])
+          return_dict["SUBPLOTS"][cur_row][cur_col]["FILEMATCH"] = []
           return_dict["SUBPLOTS"][cur_row][cur_col]["STATFILES"] = []
           return_dict["SUBPLOTS"][cur_row][cur_col]["CPUFILES"] = []
           return_dict["SUBPLOTS"][cur_row][cur_col]["ARGS"] = []
@@ -311,6 +329,16 @@ def parse_graph_options(file):
           if line.startswith("CPUFILES"):
             read_cpu_filenames = True
             read_filenames = False
+            continue
+          # Match and unmatch files based on whitespace separated words
+          # Match is a list where first element contains matches and second unmatches or None
+          if line.startswith("FILEMATCH"):
+            split = line.split(' ', 1)
+            return_dict["SUBPLOTS"][cur_row][cur_col]["FILEMATCH"].append([split[1].rstrip(), None])
+            continue
+          if line.startswith("FILEUNMATCH"):
+            split = line.split(' ', 1)
+            return_dict["SUBPLOTS"][cur_row][cur_col]["FILEMATCH"][-1][1] = split[1].rstrip()
             continue
           return_dict["SUBPLOTS"][cur_row][cur_col]["STATFILES"].append(line.rstrip())
         elif read_cpu_filenames:
@@ -766,6 +794,7 @@ def main():
   parser = argparse.ArgumentParser(description='Plot graphs from files')
   parser.add_argument('-f', type=str, dest="file", default="", required=True,
                       help="Graph options file to use. All settings for title, axes, stat files etc. should be given in this file according to readme")
+  parser.add_argument('--showfig', action='store_true', help='Show the figure instead of saving to file')
 
   args = parser.parse_args()
   print(args)
@@ -889,8 +918,10 @@ def main():
       graph_options["TITLE"] += "\n" + graph_options["TITLE2"]
     fig.suptitle(graph_options["TITLE"])
   # Either show or save fig
-  #plt.show()
-  plt.savefig(graph_options["FILENAME"])
+  if args.showfig:
+    plt.show()
+  else:
+    plt.savefig(graph_options["FILENAME"])
   #print("Saved", graph_options["FILENAME"])
 
 if (__name__ == '__main__'):
